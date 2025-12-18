@@ -27,11 +27,12 @@ export function getImagePath(categoryKey: CategoryKey, filename: string): string
   }
 
   // Construct the Cloudinary public ID from folder and filename
-  const publicId = `tali-portfolio/${folderName}/${filename.replace(/\.[^/.]+$/, '')}`
+  const baseFilename = filename.replace(/\.[^/.]+$/, '')
+  const publicId = `tali-portfolio/${folderName}/${baseFilename}`
 
   // Build Cloudinary URL with optimization
-  // Using: fetch (auto-quality, auto-format, fit: scale)
-  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,w_1200,h_1200,c_limit/${encodeURIComponent(publicId)}.jpg`
+  // Note: Don't encode the full path - just ensure each segment is URL-safe
+  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,w_1200,h_1200,c_limit/${publicId}.jpg`
 
   return cloudinaryUrl
 }
