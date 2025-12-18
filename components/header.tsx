@@ -78,7 +78,6 @@ export function Header() {
             <motion.button
               onClick={() => setIsOpen(true)}
               data-magnetic
-              whileHover={{ y: -2, rotate: 5 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
               className="p-2"
