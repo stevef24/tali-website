@@ -141,25 +141,13 @@ export function Header() {
                     }}
                     whileTap={{ scale: 0.96 }}
                     data-magnetic
-                    className="relative inline-block font-sans text-4xl font-light tracking-wide md:text-5xl group cursor-pointer"
+                    className="font-sans text-4xl font-light tracking-wide md:text-5xl cursor-pointer"
                     style={{
                       opacity: hoveredIndex === null || hoveredIndex === index ? 1 : 0.35,
                       transition: "opacity 0.3s ease-out",
                     }}
                   >
                     {item.label}
-                    <motion.div
-                      className="absolute -bottom-2 left-0 h-1 bg-gradient-to-r from-foreground via-foreground to-transparent rounded-full"
-                      initial={{ width: 0, opacity: 0 }}
-                      animate={{
-                        width: hoveredIndex === index ? "100%" : 0,
-                        opacity: hoveredIndex === index ? 1 : 0,
-                      }}
-                      transition={{
-                        duration: 0.5,
-                        ease: [0.34, 1.56, 0.64, 1],
-                      }}
-                    />
                   </motion.a>
                 </motion.div>
               ))}
