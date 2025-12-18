@@ -25,3 +25,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local media files (served from Cloudinary/Mux)
+/public/images
+/scripts
