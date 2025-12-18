@@ -141,7 +141,7 @@ export function Header() {
                     }}
                     whileTap={{ scale: 0.96 }}
                     data-magnetic
-                    className="relative font-sans text-4xl font-light tracking-wide md:text-5xl group cursor-pointer"
+                    className="relative inline-block font-sans text-4xl font-light tracking-wide md:text-5xl group cursor-pointer"
                     style={{
                       opacity: hoveredIndex === null || hoveredIndex === index ? 1 : 0.35,
                       transition: "opacity 0.3s ease-out",
