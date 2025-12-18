@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Sun, Moon, Globe } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
 import { useTheme } from "@/lib/theme"
-import { EASE_SMOOTH, STAGGER } from "@/lib/animations"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -135,42 +134,19 @@ export function Header() {
                       duration: 0.6,
                       ease: [0.34, 1.56, 0.64, 1],
                     }}
-                    whileHover={{
-                      x: 8,
-                      transition: { duration: 0.4, ease: "easeOut" },
-                    }}
                     whileTap={{ scale: 0.96 }}
                     data-magnetic
                     className="font-sans text-4xl font-light tracking-wide md:text-5xl cursor-pointer relative inline-block"
-                    style={{
-                      opacity: hoveredIndex === null || hoveredIndex === index ? 1 : 0.35,
-                      transition: "opacity 0.3s ease-out",
-                    }}
                   >
-                    <span className="relative inline-block">
-                      {item.label.split('').map((char, charIndex) => (
-                        <motion.span
-                          key={charIndex}
-                          animate={hoveredIndex === index ? { y: -2 } : { y: 0 }}
-                          transition={{
-                            delay: charIndex * STAGGER.fast,
-                            duration: 0.3,
-                            ease: EASE_SMOOTH,
-                          }}
-                          className="inline-block"
-                        >
-                          {char}
-                        </motion.span>
-                      ))}
-                    </span>
+                    {item.label}
                     <motion.div
-                      className="absolute bottom-[-6px] left-0 right-0 h-[1px] bg-foreground"
+                      className="absolute bottom-[-6px] left-0 right-0 h-0.5 bg-foreground"
                       animate={{
                         scaleX: hoveredIndex === index ? 1 : 0,
                         opacity: hoveredIndex === index ? 1 : 0,
                       }}
-                      transition={{ duration: 0.4, ease: EASE_SMOOTH }}
-                      style={{ originX: 0.5 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      style={{ originX: 0 }}
                     />
                   </motion.a>
                 </motion.div>
