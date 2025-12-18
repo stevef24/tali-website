@@ -70,8 +70,8 @@ type Translations = {
 const translations: Record<Language, Translations> = {
   en: {
     nav: {
-      work: "Work",
-      about: "About",
+      work: "Artwork",
+      about: "About the Artist",
       exhibitions: "Exhibitions",
       contact: "Contact",
     },
@@ -175,8 +175,8 @@ const translations: Record<Language, Translations> = {
   },
   he: {
     nav: {
-      work: "עבודות",
-      about: "אודות",
+      work: "אומנות",
+      about: "על האמנית",
       exhibitions: "תערוכות",
       contact: "צור קשר",
     },

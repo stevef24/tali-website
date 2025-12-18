@@ -185,7 +185,8 @@ export const artworkCategories: CategoryData[] = [
 		key: "spheres",
 		slug: "spheres",
 		folderName: "spheres",
-		previewImage: "Itali MG_7761-gigapixel-standard-scale-4_00x-cropped.jpg",
+		previewImage:
+			"detail 2/PHOTO-2025-tali 12-13-16-42-49 4-gigapixel-standard-scale-4_00x.jpg",
 		artworks: [
 			{
 				id: "sphere-1",
@@ -243,7 +244,7 @@ export const artworkCategories: CategoryData[] = [
 		slug: "architecture-of-destruction",
 		folderName: "architecture of destruction",
 		previewImage:
-			"PHOTO-2025-12-11-21tali -00-03 2-gigapixel-standard-scale-4_00x-cropped.jpg",
+			"PHOTO-2025-12-11-21tali -00-03 3-gigapixel-standard-scale-4_00x-cropped.jpg",
 		artworks: [
 			{
 				id: "architecture-1",

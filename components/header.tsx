@@ -8,7 +8,6 @@ import { useTheme } from "@/lib/theme"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const { language, setLanguage, t } = useLanguage()
   const { theme, toggleTheme } = useTheme()
 
@@ -43,7 +42,10 @@ export function Header() {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-          <a href="#" className="font-serif text-2xl tracking-tight cursor-pointer">
+          <a
+            href="#"
+            className="font-serif text-4xl tracking-tight cursor-pointer relative inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
+          >
             Tali Assa
           </a>
           <div className="flex items-center gap-2">
@@ -103,7 +105,7 @@ export function Header() {
             className="fixed inset-0 z-50 bg-background"
           >
             <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-              <span className="font-serif text-2xl tracking-tight">Tali Assa</span>
+              <span className="font-serif text-4xl tracking-tight">Tali Assa</span>
               <button
                 onClick={() => setIsOpen(false)}
                 data-magnetic
@@ -125,8 +127,6 @@ export function Header() {
                   <motion.a
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(null)}
                     initial={{ y: 40, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{
@@ -136,18 +136,9 @@ export function Header() {
                     }}
                     whileTap={{ scale: 0.96 }}
                     data-magnetic
-                    className="font-sans text-4xl font-light tracking-wide md:text-5xl cursor-pointer relative inline-block"
+                    className="font-sans text-4xl font-light tracking-wide md:text-5xl cursor-pointer relative inline-block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
                   >
                     {item.label}
-                    <motion.div
-                      className="absolute bottom-[-6px] left-0 right-0 h-0.5 bg-foreground"
-                      animate={{
-                        scaleX: hoveredIndex === index ? 1 : 0,
-                        opacity: hoveredIndex === index ? 1 : 0,
-                      }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
-                      style={{ originX: 0 }}
-                    />
                   </motion.a>
                 </motion.div>
               ))}
