@@ -28,4 +28,5 @@ next-env.d.ts
 
 # local media files (served from Cloudinary/Mux)
 /public/images
+/public/video
 /scripts
