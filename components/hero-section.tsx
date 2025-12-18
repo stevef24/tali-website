@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion"
+import MuxPlayer from "@mux/mux-player-react"
 import { DURATION, EASE_LUXURY, isMobile } from "@/lib/animations"
 
 export function HeroSection() {
@@ -33,15 +34,18 @@ export function HeroSection() {
         }}
         className="relative w-full max-w-5xl md:max-w-5xl"
       >
-        <div className="relative aspect-square w-full overflow-hidden bg-muted md:aspect-video">
-          <video
-            src="/video/testgaby.mp4"
+        <div className="relative aspect-square w-full overflow-hidden bg-muted md:aspect-video rounded-lg">
+          <MuxPlayer
+            playbackId="rR8P8mSaKDzz02TsftugTUdI00cQPJX00oy"
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
-            className="h-full w-full object-cover"
+            className="h-full w-full"
+            metadata={{
+              videoTitle: "Tali Assa - Artist Portfolio",
+              viewerUserId: "portfolio-visitor",
+            }}
           />
         </div>
       </motion.div>

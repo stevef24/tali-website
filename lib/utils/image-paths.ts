@@ -10,7 +10,8 @@ function encodePathSegments(path: string): string {
 
 /**
  * Get the full image path for a given category and filename
- * Example: getImagePath('landscape', 'photo.jpg') => '/images/landscape/photo.jpg'
+ * Returns Cloudinary URL with optimization
+ * Example: getImagePath('landscape', 'photo.jpg') => Cloudinary optimized URL
  */
 export function getImagePath(categoryKey: CategoryKey, filename: string): string {
   const folderName = FOLDER_NAME_MAP[categoryKey]
@@ -18,7 +19,21 @@ export function getImagePath(categoryKey: CategoryKey, filename: string): string
     console.warn(`Unknown category key: ${categoryKey}`)
     return ''
   }
-  return `/images/${encodeURIComponent(folderName)}/${encodePathSegments(filename)}`
+
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+  if (!cloudName) {
+    console.warn('Cloudinary cloud name not configured')
+    return ''
+  }
+
+  // Construct the Cloudinary public ID from folder and filename
+  const publicId = `tali-portfolio/${folderName}/${filename.replace(/\.[^/.]+$/, '')}`
+
+  // Build Cloudinary URL with optimization
+  // Using: fetch (auto-quality, auto-format, fit: scale)
+  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,w_1200,h_1200,c_limit/${encodeURIComponent(publicId)}.jpg`
+
+  return cloudinaryUrl
 }
 
 /**
