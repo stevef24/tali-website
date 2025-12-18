@@ -16,13 +16,13 @@ export function Footer() {
             encodedEmail="nffn.gnyn@tznvy.pbz"
             ariaLabel="Email"
             showIcon
-            className="transition-opacity hover:opacity-60"
+            className="transition-opacity hover:opacity-60 cursor-pointer"
           />
           <a
             href="https://wa.me/972528776998"
             target="_blank"
             rel="noopener noreferrer"
-            className="transition-opacity hover:opacity-60"
+            className="transition-opacity hover:opacity-60 cursor-pointer"
             aria-label="WhatsApp"
           >
             <Phone className="h-5 w-5" strokeWidth={1.5} />

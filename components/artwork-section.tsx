@@ -55,7 +55,7 @@ function DesktopCategoryCard({
       }
       onClick={() => onClick(categorySlug)}
       data-magnetic
-      className="group relative aspect-square overflow-hidden bg-muted"
+      className="group relative aspect-square overflow-hidden bg-muted cursor-pointer"
     >
       <Image
         src={getImagePath(categoryKey, previewImage)}
@@ -139,7 +139,7 @@ export function ArtworkSection() {
                   <motion.button
                     onClick={() => router.push(`/categories/${category.slug}`)}
                     data-magnetic
-                    className="group relative w-full overflow-hidden bg-muted"
+                    className="group relative w-full overflow-hidden bg-muted cursor-pointer"
                     style={{
                       aspectRatio: "1",
                       viewTransitionName: `artwork-${category.key}`,
@@ -150,7 +150,7 @@ export function ArtworkSection() {
                       alt={categoryTitle}
                       fill
                       sizes="85vw"
-                      className="object-cover transition-all duration-700 ease-in-out group-active:scale-105"
+                      className="object-cover transition-all duration-700 ease-in-out group-hover:scale-105 group-active:scale-105"
                     />
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-active:opacity-100">
                       <span className="bg-background/90 px-4 py-2 font-sans text-sm uppercase tracking-widest">

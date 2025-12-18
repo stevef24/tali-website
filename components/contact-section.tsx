@@ -106,7 +106,7 @@ export function ContactSection() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
                 data-magnetic
-                className="border border-foreground bg-transparent px-8 py-3 font-sans text-sm uppercase tracking-widest transition-all duration-300 hover:bg-foreground hover:text-background"
+                className="border border-foreground bg-transparent px-8 py-3 font-sans text-sm uppercase tracking-widest transition-all duration-300 hover:bg-foreground hover:text-background cursor-pointer"
               >
                 {t.contact.send}
               </motion.button>
@@ -126,7 +126,7 @@ export function ContactSection() {
                 </h3>
                 <a
                   href="mailto:assa.talia@gmail.com"
-                  className="font-sans text-base transition-opacity hover:opacity-60"
+                  className="font-sans text-base transition-opacity hover:opacity-60 cursor-pointer"
                   dangerouslySetInnerHTML={{
                     __html: getEncodedEmailDisplay("assa.talia@gmail.com"),
                   }}
@@ -140,7 +140,7 @@ export function ContactSection() {
                   href="https://wa.me/972528776998"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-sans text-base transition-opacity hover:opacity-60"
+                  className="font-sans text-base transition-opacity hover:opacity-60 cursor-pointer"
                 >
                   +972 52 877 6998
                 </a>

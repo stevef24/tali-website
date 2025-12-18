@@ -8,6 +8,7 @@ export function HeroSection() {
   const [scrolled, setScrolled] = useState(false)
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 500], [0, 150])
+  const scale = useTransform(scrollY, [0, 500], [1.2, 1.0])
 
   useEffect(() => {
     setScrolled(scrollY.get() > 100)
@@ -24,9 +25,12 @@ export function HeroSection() {
     <section className="relative flex min-h-screen items-center justify-center px-6 pt-20 md:px-8">
       <motion.div
         initial={{ opacity: 0, filter: "blur(20px)", scale: 0.95 }}
-        animate={{ opacity: 1, filter: "blur(0px)", scale: 1.0 }}
+        animate={{ opacity: 1, filter: "blur(0px)", scale: mobile ? 1.0 : 1.2 }}
         transition={{ duration: DURATION.heroBlur, ease: EASE_LUXURY }}
-        style={{ y: mobile ? 0 : y }}
+        style={{
+          y: mobile ? 0 : y,
+          scale: mobile ? 1 : scale
+        }}
         className="relative w-full max-w-5xl md:max-w-5xl"
       >
         <div className="relative aspect-square w-full overflow-hidden bg-muted md:aspect-video">

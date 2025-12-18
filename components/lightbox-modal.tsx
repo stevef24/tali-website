@@ -105,7 +105,7 @@ export function LightboxModal({
             </div>
             <button
               onClick={onClose}
-              className="p-2 transition-opacity hover:opacity-60"
+              className="p-2 transition-opacity hover:opacity-60 cursor-pointer"
               aria-label="Close lightbox"
             >
               <X className="h-5 w-5" strokeWidth={1.5} />
@@ -119,7 +119,7 @@ export function LightboxModal({
               <>
                 <button
                   onClick={handlePrevious}
-                  className="absolute start-4 z-10 p-2 transition-opacity hover:opacity-60 md:start-8"
+                  className="absolute start-4 z-10 p-2 transition-opacity hover:opacity-60 md:start-8 cursor-pointer"
                   aria-label="Previous artwork"
                 >
                   <ChevronLeft className="h-8 w-8 rtl:rotate-180" strokeWidth={1} />
@@ -127,7 +127,7 @@ export function LightboxModal({
 
                 <button
                   onClick={handleNext}
-                  className="absolute end-4 z-10 p-2 transition-opacity hover:opacity-60 md:end-8"
+                  className="absolute end-4 z-10 p-2 transition-opacity hover:opacity-60 md:end-8 cursor-pointer"
                   aria-label="Next artwork"
                 >
                   <ChevronRight className="h-8 w-8 rtl:rotate-180" strokeWidth={1} />
@@ -161,7 +161,7 @@ export function LightboxModal({
             <div className="flex items-center justify-center gap-4">
               <button
                 onClick={() => setZoom(z => Math.max(1, z - 0.5))}
-                className="p-2 transition-opacity hover:opacity-60"
+                className="p-2 transition-opacity hover:opacity-60 cursor-pointer"
                 aria-label="Zoom out"
               >
                 <ZoomOut className="h-5 w-5" strokeWidth={1.5} />
@@ -169,7 +169,7 @@ export function LightboxModal({
               <span className="font-sans text-xs uppercase tracking-widest">{Math.round(zoom * 100)}%</span>
               <button
                 onClick={() => setZoom(z => Math.min(3, z + 0.5))}
-                className="p-2 transition-opacity hover:opacity-60"
+                className="p-2 transition-opacity hover:opacity-60 cursor-pointer"
                 aria-label="Zoom in"
               >
                 <ZoomIn className="h-5 w-5" strokeWidth={1.5} />
@@ -188,7 +188,7 @@ export function LightboxModal({
                       setSelectedDetailIndex(idx)
                       setZoom(1)
                     }}
-                    className="relative h-20 w-20 overflow-hidden border-2 border-border transition-colors hover:border-foreground"
+                    className="relative h-20 w-20 overflow-hidden border-2 border-border transition-colors hover:border-foreground cursor-pointer"
                     aria-label={`View detail ${idx + 1}`}
                   >
                     <Image
@@ -210,7 +210,7 @@ export function LightboxModal({
               <div className="flex justify-center pt-4">
                 <button
                   onClick={() => setSelectedDetailIndex(null)}
-                  className="px-4 py-2 font-sans text-sm uppercase tracking-widest transition-opacity hover:opacity-60"
+                  className="px-4 py-2 font-sans text-sm uppercase tracking-widest transition-opacity hover:opacity-60 cursor-pointer"
                 >
                   ← {t.work.mainImage}
                 </button>

@@ -33,7 +33,7 @@ export function ExhibitionsSection() {
               }}
               whileHover={{ scale: 1.01 }}
               data-magnetic
-              className="grid grid-cols-12 gap-4 border-t border-border py-6 first:border-t-0 transition-transform duration-300"
+              className="grid grid-cols-12 gap-4 border-t border-border py-6 first:border-t-0 transition-transform duration-300 cursor-pointer"
             >
               <div className="col-span-2 font-sans text-sm uppercase tracking-widest text-muted-foreground md:col-span-1">
                 {exhibition.year}

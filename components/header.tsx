@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Menu, X, Sun, Moon, Globe } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
 import { useTheme } from "@/lib/theme"
-import { EASE_SMOOTH } from "@/lib/animations"
+import { EASE_SMOOTH, STAGGER } from "@/lib/animations"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -44,7 +44,7 @@ export function Header() {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-          <a href="#" className="font-serif text-2xl tracking-tight">
+          <a href="#" className="font-serif text-2xl tracking-tight cursor-pointer">
             Tali Assa
           </a>
           <div className="flex items-center gap-2">
@@ -54,7 +54,7 @@ export function Header() {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="p-2"
+              className="p-2 cursor-pointer"
               aria-label={theme === "light" ? t.theme.dark : t.theme.light}
             >
               {theme === "light" ? (
@@ -69,7 +69,7 @@ export function Header() {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="flex items-center gap-1 p-2 font-sans text-xs uppercase tracking-widest"
+              className="flex items-center gap-1 p-2 font-sans text-xs uppercase tracking-widest cursor-pointer"
               aria-label="Toggle language"
             >
               <Globe className="h-4 w-4 transition-opacity opacity-100 hover:opacity-60" strokeWidth={1.5} />
@@ -80,7 +80,7 @@ export function Header() {
               data-magnetic
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="p-2"
+              className="p-2 cursor-pointer"
               aria-label="Open menu"
             >
               <motion.div
@@ -108,7 +108,7 @@ export function Header() {
               <button
                 onClick={() => setIsOpen(false)}
                 data-magnetic
-                className="p-2 transition-opacity hover:opacity-60"
+                className="p-2 transition-opacity hover:opacity-60 cursor-pointer"
                 aria-label="Close menu"
               >
                 <X className="h-6 w-6" strokeWidth={1.5} />
@@ -141,13 +141,37 @@ export function Header() {
                     }}
                     whileTap={{ scale: 0.96 }}
                     data-magnetic
-                    className="font-sans text-4xl font-light tracking-wide md:text-5xl cursor-pointer"
+                    className="font-sans text-4xl font-light tracking-wide md:text-5xl cursor-pointer relative inline-block"
                     style={{
                       opacity: hoveredIndex === null || hoveredIndex === index ? 1 : 0.35,
                       transition: "opacity 0.3s ease-out",
                     }}
                   >
-                    {item.label}
+                    <span className="relative inline-block">
+                      {item.label.split('').map((char, charIndex) => (
+                        <motion.span
+                          key={charIndex}
+                          animate={hoveredIndex === index ? { y: -2 } : { y: 0 }}
+                          transition={{
+                            delay: charIndex * STAGGER.fast,
+                            duration: 0.3,
+                            ease: EASE_SMOOTH,
+                          }}
+                          className="inline-block"
+                        >
+                          {char}
+                        </motion.span>
+                      ))}
+                    </span>
+                    <motion.div
+                      className="absolute bottom-[-6px] left-0 right-0 h-[1px] bg-foreground"
+                      animate={{
+                        scaleX: hoveredIndex === index ? 1 : 0,
+                        opacity: hoveredIndex === index ? 1 : 0,
+                      }}
+                      transition={{ duration: 0.4, ease: EASE_SMOOTH }}
+                      style={{ originX: 0.5 }}
+                    />
                   </motion.a>
                 </motion.div>
               ))}
