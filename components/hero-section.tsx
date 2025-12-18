@@ -36,7 +36,7 @@ export function HeroSection() {
       >
         <div className="relative aspect-square w-full overflow-hidden bg-muted md:aspect-video rounded-lg">
           <MuxPlayer
-            playbackId="rR8P8mSaKDzz02TsftugTUdI00cQPJX00oy"
+            playbackId={process.env.NEXT_PUBLIC_MUX_PLAYBACK_ID}
             autoPlay
             muted
             loop
