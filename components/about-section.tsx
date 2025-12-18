@@ -33,7 +33,7 @@ export function AboutSection() {
 							className="relative flex-1 bg-muted overflow-hidden rounded-sm"
 						>
 							<Image
-								src="/images/tali-photo.png"
+								src="https://res.cloudinary.com/dcmflt2on/image/upload/v1766090020/tali-portfolio/tali-photo.png"
 								alt="Portrait of Tali Assa"
 								fill
 								sizes="(min-width: 768px) 40vw, 100vw"
