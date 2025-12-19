@@ -52,8 +52,8 @@ export function AboutSection() {
 									whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
 									viewport={{ once: true, amount: 0.3 }}
 									transition={{
-										delay: index * 0.08,
-										duration: 0.7,
+										delay: index * 0.12,
+										duration: 0.8,
 										ease: EASE_LUXURY,
 									}}
 								>

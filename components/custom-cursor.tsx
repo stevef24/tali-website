@@ -48,11 +48,33 @@ function CursorTracker() {
       )
     }
 
-    const setHovering = (next: boolean) => {
+    const getCursorScale = (target: EventTarget | null): number => {
+      if (!(target instanceof Element)) return 1
+
+      // Precision mode for form inputs
+      if (target.closest('input,textarea,select')) {
+        return 0.4
+      }
+
+      // Enhanced scale for buttons and links
+      if (target.closest('button,[data-magnetic],a,[role="button"],[role="link"]')) {
+        return 2.2
+      }
+
+      return 1
+    }
+
+    const setHovering = (next: boolean, target: EventTarget | null = null) => {
       if (isHoveringRef.current === next) return
       isHoveringRef.current = next
       setIsHovering(next)
-      scale.set(next ? 1.8 : 1)
+
+      if (next) {
+        const cursorScale = getCursorScale(target)
+        scale.set(cursorScale)
+      } else {
+        scale.set(1)
+      }
     }
 
     const flush = () => {
@@ -68,7 +90,7 @@ function CursorTracker() {
     }
 
     const handlePointerOver = (e: PointerEvent) => {
-      if (isInteractiveTarget(e.target)) setHovering(true)
+      if (isInteractiveTarget(e.target)) setHovering(true, e.target)
     }
 
     const handlePointerOut = (e: PointerEvent) => {

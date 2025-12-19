@@ -39,8 +39,12 @@ function DesktopCategoryCard({
 
   return (
     <motion.button
-      initial={{ opacity: 0, y: 40, filter: "blur(12px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y: 40, scale: 0.94, filter: "blur(12px)" }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      whileHover={{
+        scale: 1.05,
+        transition: { duration: 0.4, ease: EASE_LUXURY }
+      }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{
         delay: index * 0.04,
@@ -138,6 +142,11 @@ export function ArtworkSection() {
                 >
                   <motion.button
                     onClick={() => router.push(`/categories/${category.slug}`)}
+                    whileHover={{
+                      scale: 1.05,
+                      transition: { duration: 0.4, ease: EASE_LUXURY }
+                    }}
+                    whileTap={{ scale: 0.98 }}
                     data-magnetic
                     className="group relative w-full overflow-hidden bg-muted cursor-pointer"
                     style={{

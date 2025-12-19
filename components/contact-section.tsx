@@ -57,8 +57,8 @@ export function ContactSection() {
               {formFields.map((field, index) => (
                 <motion.div
                   key={field.name}
-                  initial={{ opacity: 0, y: 20, filter: "blur(12px)" }}
-                  whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  initial={{ opacity: 0, filter: "blur(12px)" }}
+                  whileInView={{ opacity: 1, filter: "blur(0px)" }}
                   viewport={{ once: true, amount: 0.3 }}
                   animate={{
                     scale: focusedField === field.name ? 1.01 : 1,
@@ -99,11 +99,15 @@ export function ContactSection() {
               ))}
               <motion.button
                 type="submit"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, filter: "blur(8px)" }}
+                whileInView={{ opacity: 1, filter: "blur(0px)" }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.6, ease: EASE_LUXURY }}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{
+                  scale: 1.05,
+                  borderColor: "var(--foreground)",
+                  boxShadow: "0 0 0 1px var(--foreground)",
+                }}
                 whileTap={{ scale: 0.98 }}
                 data-magnetic
                 className="border border-foreground bg-transparent px-8 py-3 font-sans text-sm uppercase tracking-widest transition-all duration-300 hover:bg-foreground hover:text-background cursor-pointer"
@@ -113,8 +117,8 @@ export function ContactSection() {
             </form>
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={{ opacity: 0, filter: "blur(8px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.8, ease: EASE_LUXURY }}
             className="flex flex-col justify-center"

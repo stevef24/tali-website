@@ -23,8 +23,8 @@ export function ExhibitionsSection() {
           {t.exhibitions.items.map((exhibition, index) => (
             <motion.div
               key={`${exhibition.year}-${exhibition.title}`}
-              initial={{ opacity: 0, y: 40, filter: "blur(12px)" }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={{ opacity: 0, filter: "blur(12px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{
                 delay: index * 0.06,
