@@ -1,0 +1,6 @@
+(node:86718) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:86718) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+Vercel CLI 37.5.4
+? Set up and deploy “~/Downloads/artist-portfolio-website (1)”? (Y/n)[71G
+[?25h
