@@ -5,6 +5,8 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Transpile Three.js packages for proper ESM handling
+  transpilePackages: ['three'],
   images: {
     unoptimized: isDev,
     formats: ['image/avif', 'image/webp'],

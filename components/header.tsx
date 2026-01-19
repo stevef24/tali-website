@@ -32,6 +32,7 @@ export function Header() {
     { label: t.nav.about, href: "#about" },
     { label: t.nav.exhibitions, href: "#exhibitions" },
     { label: t.nav.contact, href: "#contact" },
+    { label: t.nav.explore, href: "/experience" },
   ]
 
   const toggleLanguage = () => {

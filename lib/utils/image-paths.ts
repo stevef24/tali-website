@@ -38,6 +38,33 @@ export function getImagePath(categoryKey: CategoryKey, filename: string): string
 }
 
 /**
+ * Get canvas-optimized image path (smaller for infinite canvas performance)
+ * Uses 512px width for ~10-20x faster loading vs full resolution
+ */
+export function getCanvasImagePath(categoryKey: CategoryKey, filename: string): string {
+  const folderName = FOLDER_NAME_MAP[categoryKey]
+  if (!folderName) {
+    console.warn(`Unknown category key: ${categoryKey}`)
+    return ''
+  }
+
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
+  if (!cloudName) {
+    console.warn('Cloudinary cloud name not configured')
+    return ''
+  }
+
+  const baseFilename = filename.replace(/\.[^/.]+$/, '')
+  const publicId = `tali-portfolio/${folderName}/${baseFilename}`
+
+  // Canvas-optimized: 512px width, 80% quality, auto format
+  // This reduces file size from ~1MB to ~50KB per image
+  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/upload/q_80,f_auto,w_512,c_limit/${publicId}.jpg`
+
+  return cloudinaryUrl
+}
+
+/**
  * Get category slug from category key
  * Example: getCategorySlug('my-dutch-heroes') => 'my-dutch-heroes'
  */
