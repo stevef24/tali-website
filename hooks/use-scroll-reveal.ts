@@ -5,12 +5,12 @@ import { useScroll, useTransform, MotionValue } from 'framer-motion'
 
 interface ScrollRevealOptions {
   distance?: number
-  offset?: [string, string]
+  offset?: ["start end" | "end start" | "center center", "start end" | "end start" | "center center"]
   amount?: 'some' | 'all' | number
 }
 
 interface ScrollRevealReturn {
-  ref: React.RefObject<HTMLDivElement>
+  ref: React.RefObject<HTMLDivElement | null>
   scrollYProgress: MotionValue<number>
 }
 
@@ -28,11 +28,11 @@ interface ScrollRevealReturn {
  * ```
  */
 export function useScrollReveal(options: ScrollRevealOptions = {}): ScrollRevealReturn {
-  const { offset = ['start end', 'end start'], amount = 0.3 } = options
+  const { offset = ['start end', 'end start'] as const } = options
 
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: ref as React.RefObject<HTMLDivElement>,
     offset,
   })
 
@@ -45,7 +45,7 @@ interface ParallaxOptions extends ScrollRevealOptions {
 
 interface ParallaxReturn extends ScrollRevealReturn {
   y: MotionValue<number>
-  x?: MotionValue<number>
+  x: MotionValue<number>
 }
 
 /**
@@ -70,29 +70,27 @@ export function useParallax(
   direction: 'vertical' | 'horizontal' = 'vertical',
   options: ParallaxOptions = {}
 ): ParallaxReturn {
-  const { offset = ['start end', 'end start'], amount = 0.3 } = options
+  const { offset = ['start end', 'end start'] as const } = options
 
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: ref as React.RefObject<HTMLDivElement>,
     offset,
   })
 
-  if (direction === 'vertical') {
-    const y = useTransform(
-      scrollYProgress,
-      [0, 1],
-      [distance * speed, -distance * speed]
-    )
-    return { ref, scrollYProgress, y }
-  } else {
-    const x = useTransform(
-      scrollYProgress,
-      [0, 1],
-      [distance * speed, -distance * speed]
-    )
-    return { ref, scrollYProgress, x }
-  }
+  const y = useTransform(
+    scrollYProgress,
+    [0, 1],
+    direction === 'vertical' ? [distance * speed, -distance * speed] : [0, 0]
+  )
+
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    direction === 'horizontal' ? [distance * speed, -distance * speed] : [0, 0]
+  )
+
+  return { ref, scrollYProgress, y, x }
 }
 
 /**
@@ -113,30 +111,32 @@ export function useParallax(
  * ```
  */
 interface TransformConfig {
-  [key: string]: [number, number][]
+  [key: string]: [number[], number[]]
 }
 
-interface ScrollToTransformReturn extends ScrollRevealReturn {
-  [key: string]: MotionValue<number> | React.RefObject<HTMLDivElement>
+interface ScrollToTransformReturn {
+  ref: React.RefObject<HTMLDivElement | null>
+  scrollYProgress: MotionValue<number>
+  transforms: Record<string, MotionValue<number>>
 }
 
 export function useScrollToTransform(
   transforms: TransformConfig,
   options: ScrollRevealOptions = {}
 ): ScrollToTransformReturn {
-  const { offset = ['start end', 'end start'], amount = 0.3 } = options
+  const { offset = ['start end', 'end start'] as const } = options
 
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: ref as React.RefObject<HTMLDivElement>,
     offset,
   })
 
-  const result: ScrollToTransformReturn = { ref, scrollYProgress }
+  const transformValues: Record<string, MotionValue<number>> = {}
 
   Object.entries(transforms).forEach(([key, [inputRange, outputRange]]) => {
-    result[key] = useTransform(scrollYProgress, inputRange, outputRange)
+    transformValues[key] = useTransform(scrollYProgress, inputRange, outputRange)
   })
 
-  return result
+  return { ref, scrollYProgress, transforms: transformValues }
 }

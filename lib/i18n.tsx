@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from "react"
 
 export type Language = "en" | "he"
 
@@ -10,6 +10,7 @@ type Translations = {
     about: string
     exhibitions: string
     contact: string
+    explore: string
   }
   hero: {
     videoPlaceholder: string
@@ -74,6 +75,7 @@ const translations: Record<Language, Translations> = {
       about: "About the Artist",
       exhibitions: "Exhibitions",
       contact: "Contact",
+      explore: "Explore",
     },
     hero: {
       videoPlaceholder: "Digital Art Video",
@@ -179,6 +181,7 @@ const translations: Record<Language, Translations> = {
       about: "על האמנית",
       exhibitions: "תערוכות",
       contact: "צור קשר",
+      explore: "חקור",
     },
     hero: {
       videoPlaceholder: "וידאו אמנות דיגיטלית",
@@ -305,12 +308,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.dir = language === "he" ? "rtl" : "ltr"
   }, [language])
 
-  const value = {
+  const value = useMemo(() => ({
     language,
     setLanguage,
     t: translations[language],
-    dir: language === "he" ? "rtl" : ("ltr" as const),
-  }
+    dir: (language === "he" ? "rtl" : "ltr") as "ltr" | "rtl",
+  }), [language])
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
