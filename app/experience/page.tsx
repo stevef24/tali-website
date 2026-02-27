@@ -77,13 +77,13 @@ function PageLoader({
           transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-background"
         >
-          <div className="text-center w-full max-w-[200px] px-8">
+          <div className="text-center w-full max-w-52 px-8">
             {/* Title text */}
             <h2 className="font-serif text-xl md:text-2xl text-foreground mb-8 tracking-wide">
               Explore Art
             </h2>
             {/* Progress bar container */}
-            <div className="mb-4 h-[4px] w-full rounded-full bg-foreground/10 overflow-hidden">
+            <div className="mb-4 h-1 w-full rounded-full bg-foreground/10 overflow-hidden">
               <div
                 className="h-full bg-foreground rounded-full origin-left transition-none"
                 style={{
@@ -141,7 +141,7 @@ export default function ExperiencePage() {
   return (
     <div className="fixed inset-0 bg-background">
       {/* Mobile not supported overlay */}
-      <div className="md:hidden fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background px-8 text-center">
+      <div className="md:hidden fixed inset-0 z-50 flex flex-col items-center justify-center bg-background px-8 text-center">
         <p className="font-serif text-2xl mb-4">Infinite Canvas</p>
         <p className="font-sans text-sm text-muted-foreground uppercase tracking-widest mb-8">
           This experience is designed for desktop
@@ -171,9 +171,9 @@ export default function ExperiencePage() {
           <span>{t.work.backToGallery}</span>
         </Link>
 
-        <div className="font-serif text-lg md:text-xl">
+        <h1 className="font-serif text-lg md:text-xl">
           Infinite Canvas
-        </div>
+        </h1>
       </motion.header>
 
       {/* Instructions overlay */}

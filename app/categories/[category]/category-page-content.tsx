@@ -75,7 +75,7 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
                     setIsLightboxOpen(true)
                   }}
                   aria-label={`${t.work.viewDetails}: ${getLocalizedText(artwork.title, language)}`}
-                  className="group relative aspect-square overflow-hidden rounded-lg bg-muted cursor-pointer"
+                  className="group relative aspect-square overflow-hidden bg-muted cursor-pointer"
                 >
                   <Image
                     src={getImagePath(categoryData.key, artwork.filename)}

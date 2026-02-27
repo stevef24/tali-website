@@ -87,14 +87,14 @@ export function ContactSection() {
   ]
 
   return (
-    <section id="contact" className="px-6 py-24 lg:px-8">
+    <section id="contact" className="px-6 py-12 md:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.h2
           initial={{ opacity: 0, filter: "blur(20px)" }}
           whileInView={{ opacity: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 1.0, ease: EASE_LUXURY }}
-          className="mb-16 font-serif text-3xl tracking-tight md:text-4xl"
+          className="mb-8 md:mb-16 font-serif text-fluid-3xl tracking-tight"
         >
           {t.contact.title}
         </motion.h2>
@@ -238,6 +238,32 @@ export function ContactSection() {
                 >
                   +972 52 877 6998
                 </a>
+              </div>
+              <div>
+                <h3 className="mb-2 font-sans text-xs uppercase tracking-widest text-muted-foreground">
+                  Social
+                </h3>
+                <div className="flex items-center gap-4">
+                  <a
+                    href="https://www.facebook.com/share/1AouCA95Aw/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-sans text-base transition-opacity hover:opacity-60 cursor-pointer"
+                    aria-label="Facebook"
+                  >
+                    Facebook
+                  </a>
+                  <span className="text-muted-foreground">|</span>
+                  <a
+                    href="https://www.instagram.com/tali_assa"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-sans text-base transition-opacity hover:opacity-60 cursor-pointer"
+                    aria-label="Instagram"
+                  >
+                    Instagram
+                  </a>
+                </div>
               </div>
             </div>
           </motion.div>

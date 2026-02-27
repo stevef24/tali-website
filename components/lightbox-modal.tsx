@@ -157,7 +157,7 @@ export function LightboxModal({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="relative h-[70vh] w-[min(90vw,1200px)] overflow-hidden"
+              className="relative lightbox-media-frame overflow-hidden"
             >
               <Image
                 src={getImagePath(categoryKey, displayedImage)}
@@ -207,7 +207,7 @@ export function LightboxModal({
                       setSelectedDetailIndex(idx)
                       setZoom(1)
                     }}
-                    className="relative h-20 w-20 overflow-hidden rounded-md border-2 border-border transition-colors hover:border-foreground cursor-pointer"
+                    className="relative h-20 w-20 overflow-hidden border-2 border-border transition-colors hover:border-foreground cursor-pointer"
                     aria-label={`View detail ${idx + 1}`}
                   >
                     <Image

@@ -11,10 +11,18 @@ import {
   KEYBOARD_SPEED,
 } from '@/lib/canvas/constants'
 
+type CameraPositionUpdate = {
+  x: number
+  y: number
+  z: number
+}
+
 interface CameraControllerProps {
-  onCameraMove?: (position: THREE.Vector3) => void
+  onCameraMove?: (position: CameraPositionUpdate) => void
   enabled?: boolean
 }
+
+const CAMERA_MOVE_THROTTLE_MS = 33
 
 export function CameraController({ onCameraMove, enabled = true }: CameraControllerProps) {
   const { camera, gl } = useThree()
@@ -26,6 +34,7 @@ export function CameraController({ onCameraMove, enabled = true }: CameraControl
   const targetVelocity = useRef(new THREE.Vector3(0, 0, 0))
   const keysPressed = useRef<Set<string>>(new Set())
   const scrollAccum = useRef(0) // Scroll accumulator for smooth zoom
+  const lastMoveReportRef = useRef(0)
 
   // Handle pointer events
   const handlePointerDown = useCallback((e: PointerEvent) => {
@@ -74,6 +83,11 @@ export function CameraController({ onCameraMove, enabled = true }: CameraControl
 
   // Set up event listeners
   useEffect(() => {
+    if (!enabled) {
+      gl.domElement.style.cursor = 'default'
+      return
+    }
+
     const domElement = gl.domElement
 
     domElement.addEventListener('pointerdown', handlePointerDown)
@@ -140,7 +154,15 @@ export function CameraController({ onCameraMove, enabled = true }: CameraControl
 
     // Notify parent of camera movement
     if (onCameraMove) {
-      onCameraMove(camera.position.clone())
+      const now = performance.now()
+      if (now - lastMoveReportRef.current >= CAMERA_MOVE_THROTTLE_MS) {
+        lastMoveReportRef.current = now
+        onCameraMove({
+          x: camera.position.x,
+          y: camera.position.y,
+          z: camera.position.z,
+        })
+      }
     }
   })
 

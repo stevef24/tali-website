@@ -1,14 +1,13 @@
 "use client"
 
 import type React from "react"
-import { useRef, useState, useEffect, useCallback } from "react"
+import { useRef } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { AnimatePresence, motion, type MotionValue, useScroll, useTransform } from "framer-motion"
+import { motion, type MotionValue, useScroll, useTransform } from "framer-motion"
 import { useLanguage } from "@/lib/i18n"
 import { artworkCategories } from "@/lib/data/artwork-data"
 import { getImagePath } from "@/lib/utils/image-paths"
-import { ChevronRight } from "lucide-react"
 import { EASE_LUXURY } from "@/lib/animations"
 import { isMobile } from "@/lib/animations"
 import type { CategoryKey } from "@/lib/types/artwork"
@@ -80,10 +79,8 @@ function DesktopCategoryCard({
 
 export function ArtworkSection() {
   const router = useRouter()
-  const { t, dir } = useLanguage()
+  const { t } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [showScrollHint, setShowScrollHint] = useState(true)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -91,32 +88,15 @@ export function ArtworkSection() {
 
   const mobile = typeof window !== "undefined" ? isMobile() : false
 
-  const handleScroll = useCallback(() => {
-    if (!scrollContainerRef.current) return
-    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
-    // Check if scrolled to the end (with a small threshold)
-    // For RTL, scrollLeft is negative, so we check the absolute value
-    const maxScroll = scrollWidth - clientWidth
-    const atEnd = maxScroll <= 0 || Math.abs(scrollLeft) >= maxScroll - 20
-    if (atEnd) setShowScrollHint(false)
-  }, [])
-
-  useEffect(() => {
-    const el = scrollContainerRef.current
-    if (!el) return
-    el.addEventListener("scroll", handleScroll, { passive: true })
-    return () => el.removeEventListener("scroll", handleScroll)
-  }, [handleScroll])
-
   return (
-    <section id="work" ref={sectionRef} className="px-6 py-24 lg:px-8">
+    <section id="work" ref={sectionRef} className="px-6 py-12 md:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.h2
           initial={{ opacity: 0, filter: "blur(20px)" }}
           whileInView={{ opacity: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 1.0, ease: EASE_LUXURY }}
-          className="mb-16 font-serif text-3xl tracking-tight md:text-4xl"
+          className="mb-8 md:mb-16 font-serif text-fluid-3xl tracking-tight"
         >
           {t.work.title}
         </motion.h2>
@@ -138,105 +118,45 @@ export function ArtworkSection() {
           ))}
         </div>
 
-        {/* Mobile: Horizontal scroll with visible category names */}
-        <div
-          ref={scrollContainerRef}
-          className="md:hidden -mx-6 overflow-x-auto px-6"
-          style={{ scrollSnapType: "x mandatory" }}
-        >
-          <div className="flex gap-6 pb-4">
-            {artworkCategories.map((category, index) => {
-              const categoryTitle = t.work.categories[category.key]
-              return (
-                <motion.div
-                  key={category.key}
-                  initial={{ opacity: 0, x: 20, filter: "blur(12px)" }}
-                  whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{
-                    delay: index * 0.05,
-                    duration: 0.6,
-                    ease: EASE_LUXURY,
-                  }}
-                  className="flex-shrink-0"
-                  style={{
-                    width: "85vw",
-                    scrollSnapAlign: "center",
-                  }}
-                >
-                  <motion.button
-                    onClick={() => router.push(`/categories/${category.slug}`)}
-                    whileHover={{
-                      scale: 1.05,
-                      transition: { duration: 0.4, ease: EASE_LUXURY }
-                    }}
-                    whileTap={{ scale: 0.98 }}
-                    data-magnetic
-                    className="group relative w-full overflow-hidden bg-muted cursor-pointer"
-                    style={{
-                      aspectRatio: "1",
-                      viewTransitionName: `artwork-${category.key}`,
-                    } as React.CSSProperties}
-                  >
-                    <Image
-                      src={getImagePath(category.key, category.previewImage)}
-                      alt={categoryTitle}
-                      fill
-                      sizes="85vw"
-                      className="object-cover transition-all duration-700 ease-in-out group-hover:scale-105 group-active:scale-105"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-active:opacity-100">
-                      <span className="bg-background/90 px-4 py-2 font-sans text-sm uppercase tracking-widest">
-                        {categoryTitle}
-                      </span>
-                    </div>
-                  </motion.button>
-                  {/* Category name label below image on mobile */}
-                  <p className="mt-3 font-serif text-sm tracking-tight md:text-base text-foreground/80">
-                    {categoryTitle}
-                  </p>
-                </motion.div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Mobile scroll hint — text + animated chevrons */}
-        <AnimatePresence>
-          {showScrollHint && (
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ delay: 0.8, duration: 0.5, ease: EASE_LUXURY }}
-              className="md:hidden flex items-center justify-center gap-2.5 pt-5"
-            >
-              <span className="font-sans text-xs uppercase tracking-widest text-foreground/40">
-                {t.scrollHint}
-              </span>
-              <div
-                className="flex items-center -space-x-1.5"
-                style={{ transform: dir === "rtl" ? "scaleX(-1)" : undefined }}
+        {/* Mobile: Vertical grid — all categories visible */}
+        <div className="md:hidden grid grid-cols-2 gap-3">
+          {artworkCategories.map((category, index) => {
+            const categoryTitle = t.work.categories[category.key]
+            return (
+              <motion.button
+                key={category.key}
+                initial={{ opacity: 0, y: 20, filter: "blur(12px)" }}
+                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{
+                  delay: index * 0.04,
+                  duration: 0.6,
+                  ease: EASE_LUXURY,
+                }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => router.push(`/categories/${category.slug}`)}
+                className="group relative overflow-hidden bg-muted cursor-pointer"
+                style={{
+                  aspectRatio: "3/4",
+                  viewTransitionName: `artwork-${category.key}`,
+                } as React.CSSProperties}
               >
-                {[0, 1, 2].map((i) => (
-                  <motion.span
-                    key={i}
-                    animate={{ opacity: [0.15, 0.8, 0.15] }}
-                    transition={{
-                      duration: 1.4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: i * 0.2,
-                    }}
-                    className="text-foreground/50"
-                  >
-                    <ChevronRight className="h-4 w-4" strokeWidth={1.5} />
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <Image
+                  src={getImagePath(category.key, category.previewImage)}
+                  alt={categoryTitle}
+                  fill
+                  sizes="50vw"
+                  className="object-cover transition-all duration-500 ease-in-out group-active:scale-105"
+                />
+                <div className="absolute inset-x-0 bottom-0 media-overlay-label px-3 pb-3 pt-8">
+                  <span className="font-sans text-xs uppercase tracking-widest">
+                    {categoryTitle}
+                  </span>
+                </div>
+              </motion.button>
+            )
+          })}
+        </div>
       </div>
     </section>
   )

@@ -47,7 +47,7 @@ export function Header() {
             href="#"
             className="font-serif text-4xl tracking-tight cursor-pointer relative inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
           >
-            Tali Assa
+            Tali Assa Art
           </a>
           <div className="flex items-center gap-2">
             <motion.button
@@ -116,7 +116,7 @@ export function Header() {
                 <X className="h-5 w-5" strokeWidth={1.5} />
               </button>
             </div>
-            <nav className="flex h-[calc(100vh-5rem)] flex-col items-center justify-center gap-12">
+            <nav className="flex mobile-menu-panel flex-col items-center justify-center gap-12">
               {navItems.map((item, index) => (
                 <motion.div
                   key={item.label}

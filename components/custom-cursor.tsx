@@ -6,6 +6,7 @@ import { useTheme } from '@/lib/theme'
 
 export function CustomCursor() {
   const [isTouch, setIsTouch] = useState(true)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   useEffect(() => {
     // Check if device supports touch
@@ -14,9 +15,22 @@ export function CustomCursor() {
       ('ontouchstart' in window || navigator.maxTouchPoints > 0)
 
     setIsTouch(hasTouch)
+
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mediaQuery.matches)
+
+    const handleMotionPreferenceChange = (event: MediaQueryListEvent) => {
+      setPrefersReducedMotion(event.matches)
+    }
+
+    mediaQuery.addEventListener('change', handleMotionPreferenceChange)
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleMotionPreferenceChange)
+    }
   }, [])
 
-  if (isTouch) return null
+  if (isTouch || prefersReducedMotion) return null
 
   return <CursorTracker />
 }

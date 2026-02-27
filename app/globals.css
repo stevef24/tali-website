@@ -37,6 +37,9 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --media-overlay-rgb: 0 0 0;
+  --media-overlay-text-rgb: 255 255 255;
+  --media-overlay-alpha: 0.7;
 }
 
 .dark {
@@ -72,6 +75,9 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+  --media-overlay-rgb: 0 0 0;
+  --media-overlay-text-rgb: 255 255 255;
+  --media-overlay-alpha: 0.7;
 }
 
 @theme inline {
@@ -153,21 +159,8 @@ html {
   }
 }
 
-
-/* Reduced motion support for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
 /* Mobile optimizations */
-@media (max-width: 768px) {
+@media (max-width: 47.998rem) {
   body {
     font-size: 16px;
     line-height: 1.7;
@@ -203,12 +196,19 @@ html {
   }
 }
 
-/* Disable custom cursor on touch devices */
-@media (pointer: coarse) {
-  html {
-    cursor: auto;
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
+}
 
+@media (pointer: coarse) {
   /* Remove hover states on touch devices */
   button:hover,
   a:hover,
@@ -304,6 +304,28 @@ main {
 
 .text-fluid-4xl {
   font-size: clamp(2.25rem, 1.8rem + 2.25vw, 3rem);
+}
+
+/* ============================================
+   Consistent media and pattern primitives
+   ============================================ */
+
+.media-overlay-label {
+  background-image: linear-gradient(
+    to top,
+    rgb(var(--media-overlay-rgb) / var(--media-overlay-alpha)),
+    transparent
+  );
+  color: rgb(var(--media-overlay-text-rgb));
+}
+
+.lightbox-media-frame {
+  height: 70vh;
+  width: min(90vw, 75rem);
+}
+
+.mobile-menu-panel {
+  height: calc(100vh - 5rem);
 }
 
 /* ============================================

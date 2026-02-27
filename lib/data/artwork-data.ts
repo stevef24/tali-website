@@ -319,14 +319,6 @@ export const artworkCategories: CategoryData[] = [
 				size: "15x15",
 			},
 			{
-				id: "human-20",
-				filename: "20260127_133657 (1).jpg",
-				title: "מאשה עצומות עיניים",
-				year: "2016",
-				medium: "שמן על קנווס | Oil on canvas",
-				size: "20x25",
-			},
-			{
 				id: "human-21",
 				filename: "20260127_134446 (1).jpg",
 				title: "עיניים עצומות",
@@ -340,14 +332,6 @@ export const artworkCategories: CategoryData[] = [
 				title: "ללא כותרת | Untitled",
 				year: "2015",
 				medium: "גואש על נייר | Gouache on paper",
-				size: "30x40",
-			},
-			{
-				id: "human-23",
-				filename: "FB_IMG_1769603108359.jpg",
-				title: "ללא כותרת | Untitled",
-				year: "2015",
-				medium: "שמן על קנווס | Oil on canvas",
 				size: "30x40",
 			},
 			{
@@ -646,7 +630,7 @@ export const artworkCategories: CategoryData[] = [
 		key: "still-life",
 		slug: "still-life",
 		folderName: "Still life",
-		previewImage: "ונוס 2015 שמן על בד מוצמד לעץ 3245 ס״מ.jpg",
+		previewImage: "סיגליות 2020 שמן על עץ 2530 ס״מ.jpg",
 		artworks: [
 			{
 				id: "still-3",

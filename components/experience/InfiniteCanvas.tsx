@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
-import * as THREE from 'three'
 import { useTheme } from 'next-themes'
 import {
   CAMERA_FOV,
@@ -25,8 +24,19 @@ interface InfiniteCanvasProps {
   onProgress?: (progress: number) => void
 }
 
+type CameraPosition = {
+  x: number
+  y: number
+  z: number
+}
+
 export function InfiniteCanvas({ onArtworkSelect, onProgress }: InfiniteCanvasProps) {
-  const [cameraPosition, setCameraPosition] = useState(new THREE.Vector3(0, 0, INITIAL_CAMERA_Z))
+  const [cameraPosition, setCameraPosition] = useState<CameraPosition>({
+    x: 0,
+    y: 0,
+    z: INITIAL_CAMERA_Z,
+  })
+  const cameraPositionRef = useRef(cameraPosition)
   const [isReducedMotion, setIsReducedMotion] = useState(false)
   const { resolvedTheme } = useTheme()
   const maxProgressRef = useRef(0)
@@ -60,8 +70,24 @@ export function InfiniteCanvas({ onArtworkSelect, onProgress }: InfiniteCanvasPr
     }
   }, [onProgress])
 
-  const handleCameraMove = useCallback((position: THREE.Vector3) => {
-    setCameraPosition(position.clone())
+  const handleCameraMove = useCallback((position: { x: number; y: number; z: number }) => {
+    const previous = cameraPositionRef.current
+    const deltaX = Math.abs(position.x - previous.x)
+    const deltaY = Math.abs(position.y - previous.y)
+    const deltaZ = Math.abs(position.z - previous.z)
+
+    if (deltaX < 0.01 && deltaY < 0.01 && deltaZ < 0.01) {
+      return
+    }
+
+    const nextPosition = {
+      x: position.x,
+      y: position.y,
+      z: position.z,
+    }
+
+    cameraPositionRef.current = nextPosition
+    setCameraPosition(nextPosition)
   }, [])
 
   const handleArtworkClick = useCallback((artwork: CanvasArtwork, index: number) => {

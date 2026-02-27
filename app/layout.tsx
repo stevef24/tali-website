@@ -27,7 +27,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Tali Assa — Artist",
+  title: "Tali Assa Art",
   description:
     "Portfolio of Tali Assa, a painter, psychologist, and musician exploring abstraction, texture, and the boundaries between observation and imagination.",
     generator: 'v0.app'

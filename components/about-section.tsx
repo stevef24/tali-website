@@ -10,14 +10,14 @@ export function AboutSection() {
 	const { t } = useLanguage();
 
 	return (
-		<section id="about" className="px-6 py-24 lg:px-8">
+		<section id="about" className="px-6 py-12 md:py-24 lg:px-8">
 			<div className="mx-auto max-w-7xl">
 				<motion.h2
 					initial={{ opacity: 0, filter: "blur(20px)" }}
 					whileInView={{ opacity: 1, filter: "blur(0px)" }}
 					viewport={{ once: true }}
 					transition={{ duration: 1.0, ease: EASE_LUXURY }}
-					className="mb-16 font-serif text-3xl tracking-tight md:text-4xl"
+					className="mb-8 md:mb-16 font-serif text-fluid-3xl tracking-tight"
 				>
 					{t.about.title}
 				</motion.h2>
@@ -37,7 +37,7 @@ export function AboutSection() {
 							sizes="(min-width: 768px) 40vw, 100vw"
 							placeholder="blur"
 							blurDataURL={getBlurDataUrl()}
-							className="w-full h-auto rounded-lg"
+							className="w-full h-auto"
 						/>
 					</motion.div>
 					<div className="flex flex-col justify-center md:col-span-3">

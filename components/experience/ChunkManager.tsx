@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useMemo, useRef } from 'react'
-import * as THREE from 'three'
 import { RENDER_DISTANCE } from '@/lib/canvas/constants'
 import {
   generateChunkPlanesCached,
@@ -22,7 +21,11 @@ const MAX_THROTTLE_MS = 400
 const ZOOM_SPEED_THRESHOLD = 5 // Z units per second to trigger throttling
 
 interface ChunkManagerProps {
-  cameraPosition: THREE.Vector3
+  cameraPosition: {
+    x: number
+    y: number
+    z: number
+  }
   onArtworkClick: (artwork: CanvasArtwork, index: number) => void
 }
 

@@ -10,6 +10,7 @@ import { BackgroundShapes } from "@/components/background-shapes"
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
+      <h1 className="sr-only">Tali Assa Art</h1>
       <BackgroundShapes />
       <Header />
       <HeroSection />
@@ -21,5 +22,4 @@ export default function Home() {
     </main>
   )
 }
-
 
