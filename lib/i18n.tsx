@@ -70,6 +70,11 @@ type Translations = {
     en: string
     he: string
   }
+  notFound: {
+    message: string
+    backHome: string
+  }
+  scrollHint: string
 }
 
 const translations: Record<Language, Translations> = {
@@ -181,6 +186,11 @@ const translations: Record<Language, Translations> = {
       en: "EN",
       he: "עב",
     },
+    notFound: {
+      message: "This page could not be found.",
+      backHome: "Back to Gallery",
+    },
+    scrollHint: "Swipe to explore",
   },
   he: {
     nav: {
@@ -290,6 +300,11 @@ const translations: Record<Language, Translations> = {
       en: "EN",
       he: "עב",
     },
+    notFound: {
+      message: "העמוד לא נמצא.",
+      backHome: "חזרה לגלריה",
+    },
+    scrollHint: "החליקו לגלות",
   },
 }
 

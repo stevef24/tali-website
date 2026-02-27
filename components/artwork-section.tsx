@@ -1,13 +1,14 @@
 "use client"
 
 import type React from "react"
-import { useRef } from "react"
+import { useRef, useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { motion, type MotionValue, useScroll, useTransform } from "framer-motion"
+import { AnimatePresence, motion, type MotionValue, useScroll, useTransform } from "framer-motion"
 import { useLanguage } from "@/lib/i18n"
 import { artworkCategories } from "@/lib/data/artwork-data"
 import { getImagePath } from "@/lib/utils/image-paths"
+import { ChevronRight } from "lucide-react"
 import { EASE_LUXURY } from "@/lib/animations"
 import { isMobile } from "@/lib/animations"
 import type { CategoryKey } from "@/lib/types/artwork"
@@ -79,14 +80,33 @@ function DesktopCategoryCard({
 
 export function ArtworkSection() {
   const router = useRouter()
-  const { t } = useLanguage()
+  const { t, dir } = useLanguage()
   const sectionRef = useRef<HTMLElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [showScrollHint, setShowScrollHint] = useState(true)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   })
 
   const mobile = typeof window !== "undefined" ? isMobile() : false
+
+  const handleScroll = useCallback(() => {
+    if (!scrollContainerRef.current) return
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
+    // Check if scrolled to the end (with a small threshold)
+    // For RTL, scrollLeft is negative, so we check the absolute value
+    const maxScroll = scrollWidth - clientWidth
+    const atEnd = maxScroll <= 0 || Math.abs(scrollLeft) >= maxScroll - 20
+    if (atEnd) setShowScrollHint(false)
+  }, [])
+
+  useEffect(() => {
+    const el = scrollContainerRef.current
+    if (!el) return
+    el.addEventListener("scroll", handleScroll, { passive: true })
+    return () => el.removeEventListener("scroll", handleScroll)
+  }, [handleScroll])
 
   return (
     <section id="work" ref={sectionRef} className="px-6 py-24 lg:px-8">
@@ -119,7 +139,11 @@ export function ArtworkSection() {
         </div>
 
         {/* Mobile: Horizontal scroll with visible category names */}
-        <div className="md:hidden -mx-6 overflow-x-auto px-6" style={{ scrollSnapType: "x mandatory" }}>
+        <div
+          ref={scrollContainerRef}
+          className="md:hidden -mx-6 overflow-x-auto px-6"
+          style={{ scrollSnapType: "x mandatory" }}
+        >
           <div className="flex gap-6 pb-4">
             {artworkCategories.map((category, index) => {
               const categoryTitle = t.work.categories[category.key]
@@ -176,6 +200,43 @@ export function ArtworkSection() {
             })}
           </div>
         </div>
+
+        {/* Mobile scroll hint — text + animated chevrons */}
+        <AnimatePresence>
+          {showScrollHint && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ delay: 0.8, duration: 0.5, ease: EASE_LUXURY }}
+              className="md:hidden flex items-center justify-center gap-2.5 pt-5"
+            >
+              <span className="font-sans text-xs uppercase tracking-widest text-foreground/40">
+                {t.scrollHint}
+              </span>
+              <div
+                className="flex items-center -space-x-1.5"
+                style={{ transform: dir === "rtl" ? "scaleX(-1)" : undefined }}
+              >
+                {[0, 1, 2].map((i) => (
+                  <motion.span
+                    key={i}
+                    animate={{ opacity: [0.15, 0.8, 0.15] }}
+                    transition={{
+                      duration: 1.4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: i * 0.2,
+                    }}
+                    className="text-foreground/50"
+                  >
+                    <ChevronRight className="h-4 w-4" strokeWidth={1.5} />
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   )
