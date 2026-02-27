@@ -32,7 +32,7 @@ export function Header() {
     { label: t.nav.about, href: "#about" },
     { label: t.nav.exhibitions, href: "#exhibitions" },
     { label: t.nav.contact, href: "#contact" },
-    { label: t.nav.explore, href: "/experience" },
+    { label: t.nav.explore, href: "/experience", desktopOnly: true },
   ]
 
   const toggleLanguage = () => {
@@ -74,7 +74,7 @@ export function Header() {
               className="flex items-center gap-1 p-2 font-sans text-xs uppercase tracking-widest cursor-pointer"
               aria-label="Toggle language"
             >
-              <Globe className="h-4 w-4 transition-opacity opacity-100 hover:opacity-60" strokeWidth={1.5} />
+              <Globe className="h-5 w-5 transition-opacity opacity-100 hover:opacity-60" strokeWidth={1.5} />
               <span className="transition-opacity opacity-100 hover:opacity-60">{language === "en" ? "עב" : "EN"}</span>
             </motion.button>
             <motion.button
@@ -89,7 +89,7 @@ export function Header() {
                 animate={{ rotate: isOpen ? 45 : 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <Menu className="h-6 w-6 transition-opacity opacity-100 hover:opacity-60" strokeWidth={1.5} />
+                <Menu className="h-5 w-5 transition-opacity opacity-100 hover:opacity-60" strokeWidth={1.5} />
               </motion.div>
             </motion.button>
           </div>
@@ -113,7 +113,7 @@ export function Header() {
                 className="p-2 transition-opacity hover:opacity-60 cursor-pointer"
                 aria-label="Close menu"
               >
-                <X className="h-6 w-6" strokeWidth={1.5} />
+                <X className="h-5 w-5" strokeWidth={1.5} />
               </button>
             </div>
             <nav className="flex h-[calc(100vh-5rem)] flex-col items-center justify-center gap-12">
@@ -123,7 +123,7 @@ export function Header() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: index * 0.12, duration: 0.5 }}
-                  className="overflow-hidden"
+                  className={`overflow-hidden${item.desktopOnly ? " hidden md:block" : ""}`}
                 >
                   <motion.a
                     href={item.href}
@@ -137,7 +137,7 @@ export function Header() {
                     }}
                     whileTap={{ scale: 0.96 }}
                     data-magnetic
-                    className="font-sans text-4xl font-light tracking-wide md:text-5xl cursor-pointer relative inline-block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
+                    className="font-sans text-3xl font-light tracking-wide md:text-4xl cursor-pointer relative inline-block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
                   >
                     {item.label}
                   </motion.a>

@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Cormorant_Garamond, DM_Sans, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
+import { Agentation } from "agentation"
 import { ThemeProvider } from "@/lib/theme"
 import { LanguageProvider } from "@/lib/i18n"
 import { CustomCursor } from "@/components/custom-cursor"
@@ -45,6 +46,7 @@ export default function RootLayout({
           <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
         <Analytics />
+        {process.env.NODE_ENV === "development" && <Agentation />}
       </body>
     </html>
   )

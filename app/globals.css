@@ -123,6 +123,23 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  summary {
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  input:disabled {
+    cursor: not-allowed;
+  }
 }
 
 html {

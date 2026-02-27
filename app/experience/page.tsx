@@ -140,6 +140,19 @@ export default function ExperiencePage() {
 
   return (
     <div className="fixed inset-0 bg-background">
+      {/* Mobile not supported overlay */}
+      <div className="md:hidden fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background px-8 text-center">
+        <p className="font-serif text-2xl mb-4">Infinite Canvas</p>
+        <p className="font-sans text-sm text-muted-foreground uppercase tracking-widest mb-8">
+          This experience is designed for desktop
+        </p>
+        <Link
+          href="/"
+          className="font-sans text-xs uppercase tracking-widest underline underline-offset-4 hover:opacity-60 transition-opacity"
+        >
+          Back to gallery
+        </Link>
+      </div>
       {/* Loading overlay */}
       <PageLoader isLoading={isLoading} progress={loadingProgress} />
 

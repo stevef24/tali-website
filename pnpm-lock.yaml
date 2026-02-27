@@ -110,6 +110,9 @@ importers:
       '@vercel/analytics':
         specifier: 1.3.1
         version: 1.3.1(next@16.0.10(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
+      agentation:
+        specifier: ^2.2.0
+        version: 2.2.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.23(postcss@8.5.6)
@@ -1369,6 +1372,17 @@ packages:
 
   '@webgpu/types@0.1.69':
     resolution: {integrity: sha512-RPmm6kgRbI8e98zSD3RVACvnuktIja5+yLgDAkTmxLr90BEwdTXRQWNLF3ETTTyH/8mKhznZuN5AveXYFEsMGQ==}
+
+  agentation@2.2.0:
+    resolution: {integrity: sha512-DIkXtC/XpOdAK/X1qYZMYocSjfU7EKe5bYG5DyxEr2wIuSxEVi2edSQsIWbB+k/S3yvAnnCfpuTkHh8LOvYxgQ==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
 
   aria-hidden@1.2.6:
     resolution: {integrity: sha512-ik3ZgC9dY/lYVVM++OISsaYDeg1tb0VtP5uL3ouh1koGOaUMDPpbFIei4JkFimWUFPn90sbMNMXQAIVOlnYKJA==}
@@ -3256,6 +3270,11 @@ snapshots:
       react: 19.2.0
 
   '@webgpu/types@0.1.69': {}
+
+  agentation@2.2.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+    optionalDependencies:
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
 
   aria-hidden@1.2.6:
     dependencies:

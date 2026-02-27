@@ -14,11 +14,38 @@ export function ContactSection() {
     message: "",
   })
   const [focusedField, setFocusedField] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const { t } = useLanguage()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log("Form submitted:", formData)
+    setIsSubmitting(true)
+    setSubmitStatus("idle")
+
+    const form = new FormData()
+    form.append("access_key", "28e8ac11-b587-4e51-b1b1-c823ad29ace0")
+    form.append("name", formData.name)
+    form.append("email", formData.email)
+    form.append("message", formData.message)
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: form,
+      })
+      const data = await response.json()
+      if (data.success) {
+        setSubmitStatus("success")
+        setFormData({ name: "", email: "", message: "" })
+      } else {
+        setSubmitStatus("error")
+      }
+    } catch {
+      setSubmitStatus("error")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -28,10 +55,35 @@ export function ContactSection() {
     }))
   }
 
-  const formFields = [
-    { name: "name", type: "input", placeholder: t.contact.name },
-    { name: "email", type: "input", placeholder: t.contact.email },
-    { name: "message", type: "textarea", placeholder: t.contact.message },
+  const formFields: Array<{
+    name: keyof typeof formData
+    type: "input" | "textarea"
+    placeholder: string
+    autoComplete: string
+    inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"]
+    spellCheck?: boolean
+  }> = [
+    {
+      name: "name",
+      type: "input",
+      placeholder: t.contact.name,
+      autoComplete: "name",
+      inputMode: "text",
+    },
+    {
+      name: "email",
+      type: "input",
+      placeholder: t.contact.email,
+      autoComplete: "email",
+      inputMode: "email",
+      spellCheck: false,
+    },
+    {
+      name: "message",
+      type: "textarea",
+      placeholder: t.contact.message,
+      autoComplete: "off",
+    },
   ]
 
   return (
@@ -54,66 +106,104 @@ export function ContactSection() {
             transition={{ duration: 0.8, ease: EASE_LUXURY }}
           >
             <form onSubmit={handleSubmit} className="space-y-8">
-              {formFields.map((field, index) => (
-                <motion.div
-                  key={field.name}
-                  initial={{ opacity: 0, filter: "blur(12px)" }}
+              {formFields.map((field, index) => {
+                const fieldId = `contact-${field.name}`
+
+                return (
+                  <motion.div
+                    key={field.name}
+                    initial={{ opacity: 0, filter: "blur(12px)" }}
+                    whileInView={{ opacity: 1, filter: "blur(0px)" }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    animate={{
+                      scale: focusedField === field.name ? 1.01 : 1,
+                    }}
+                    transition={{
+                      delay: index * 0.08,
+                      duration: 0.6,
+                      ease: EASE_LUXURY,
+                    }}
+                    className="group"
+                  >
+                    <label htmlFor={fieldId} className="sr-only">
+                      {field.placeholder}
+                    </label>
+                    {field.type === "input" ? (
+                      <input
+                        id={fieldId}
+                        type={field.name === "email" ? "email" : "text"}
+                        name={field.name}
+                        autoComplete={field.autoComplete}
+                        inputMode={field.inputMode}
+                        spellCheck={field.spellCheck}
+                        value={formData[field.name]}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField(field.name)}
+                        onBlur={() => setFocusedField(null)}
+                        placeholder={field.placeholder}
+                        required
+                        className="w-full border-b border-border bg-transparent py-3 font-sans text-base outline-none transition-all duration-300 placeholder:text-muted-foreground focus:border-foreground focus:border-b-2"
+                      />
+                    ) : (
+                      <textarea
+                        id={fieldId}
+                        name={field.name}
+                        autoComplete={field.autoComplete}
+                        spellCheck={field.spellCheck}
+                        value={formData[field.name]}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField(field.name)}
+                        onBlur={() => setFocusedField(null)}
+                        placeholder={field.placeholder}
+                        rows={4}
+                        required
+                        className="w-full resize-none border-b border-border bg-transparent py-3 font-sans text-base outline-none transition-all duration-300 placeholder:text-muted-foreground focus:border-foreground focus:border-b-2"
+                      />
+                    )}
+                  </motion.div>
+                )
+              })}
+              <div className="space-y-4">
+                <motion.button
+                  type="submit"
+                  disabled={isSubmitting}
+                  initial={{ opacity: 0, filter: "blur(8px)" }}
                   whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  animate={{
-                    scale: focusedField === field.name ? 1.01 : 1,
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3, duration: 0.6, ease: EASE_LUXURY }}
+                  whileHover={isSubmitting ? {} : {
+                    scale: 1.05,
+                    borderColor: "var(--foreground)",
+                    boxShadow: "0 0 0 1px var(--foreground)",
                   }}
-                  transition={{
-                    delay: index * 0.08,
-                    duration: 0.6,
-                    ease: EASE_LUXURY,
-                  }}
-                  className="group"
+                  whileTap={isSubmitting ? {} : { scale: 0.98 }}
+                  data-magnetic
+                  className="border border-foreground bg-transparent px-8 py-3 font-sans text-sm uppercase tracking-widest transition-all duration-300 hover:bg-foreground hover:text-background cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  {field.type === "input" ? (
-                    <input
-                      type={field.name === "email" ? "email" : "text"}
-                      name={field.name}
-                      value={formData[field.name as keyof typeof formData]}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField(field.name)}
-                      onBlur={() => setFocusedField(null)}
-                      placeholder={field.placeholder}
-                      required
-                      className="w-full border-b border-border bg-transparent py-3 font-sans text-base outline-none transition-all duration-300 placeholder:text-muted-foreground focus:border-foreground focus:border-b-2"
-                    />
-                  ) : (
-                    <textarea
-                      name={field.name}
-                      value={formData[field.name as keyof typeof formData]}
-                      onChange={handleChange}
-                      onFocus={() => setFocusedField(field.name)}
-                      onBlur={() => setFocusedField(null)}
-                      placeholder={field.placeholder}
-                      rows={4}
-                      required
-                      className="w-full resize-none border-b border-border bg-transparent py-3 font-sans text-base outline-none transition-all duration-300 placeholder:text-muted-foreground focus:border-foreground focus:border-b-2"
-                    />
+                  {isSubmitting ? "Sending…" : t.contact.send}
+                </motion.button>
+
+                <div aria-live="polite">
+                  {submitStatus === "success" && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="font-sans text-sm text-muted-foreground tracking-wide"
+                    >
+                      {t.contact.success}
+                    </motion.p>
                   )}
-                </motion.div>
-              ))}
-              <motion.button
-                type="submit"
-                initial={{ opacity: 0, filter: "blur(8px)" }}
-                whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.6, ease: EASE_LUXURY }}
-                whileHover={{
-                  scale: 1.05,
-                  borderColor: "var(--foreground)",
-                  boxShadow: "0 0 0 1px var(--foreground)",
-                }}
-                whileTap={{ scale: 0.98 }}
-                data-magnetic
-                className="border border-foreground bg-transparent px-8 py-3 font-sans text-sm uppercase tracking-widest transition-all duration-300 hover:bg-foreground hover:text-background cursor-pointer"
-              >
-                {t.contact.send}
-              </motion.button>
+                  {submitStatus === "error" && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="font-sans text-sm text-destructive tracking-wide"
+                    >
+                      {t.contact.error}
+                    </motion.p>
+                  )}
+                </div>
+              </div>
             </form>
           </motion.div>
           <motion.div

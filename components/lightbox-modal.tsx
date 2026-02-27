@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n'
+import { getLocalizedText, formatSize } from '@/lib/utils'
 import type { Artwork, CategoryKey } from '@/lib/types/artwork'
 import { getImagePath, getBlurDataUrl } from '@/lib/utils/image-paths'
 
@@ -26,16 +27,40 @@ export function LightboxModal({
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [zoom, setZoom] = useState(1)
   const [selectedDetailIndex, setSelectedDetailIndex] = useState<number | null>(null)
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
 
-  // Reset states when modal opens/closes
+  // Reset states and lock body scroll when modal opens/closes
   useEffect(() => {
     if (isOpen) {
       setCurrentIndex(initialIndex)
       setZoom(1)
       setSelectedDetailIndex(null)
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
     }
   }, [isOpen, initialIndex])
+
+  const handleNext = useCallback(() => {
+    if (selectedDetailIndex !== null) {
+      setSelectedDetailIndex(null)
+    } else {
+      setCurrentIndex(prev => (prev + 1) % artworks.length)
+      setZoom(1)
+    }
+  }, [artworks.length, selectedDetailIndex])
+
+  const handlePrevious = useCallback(() => {
+    if (selectedDetailIndex !== null) {
+      setSelectedDetailIndex(null)
+    } else {
+      setCurrentIndex(prev => (prev - 1 + artworks.length) % artworks.length)
+      setZoom(1)
+    }
+  }, [artworks.length, selectedDetailIndex])
 
   // Handle keyboard shortcuts
   useEffect(() => {
@@ -49,25 +74,7 @@ export function LightboxModal({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, currentIndex])
-
-  const handleNext = () => {
-    if (selectedDetailIndex !== null) {
-      setSelectedDetailIndex(null)
-    } else {
-      setCurrentIndex(prev => (prev + 1) % artworks.length)
-      setZoom(1)
-    }
-  }
-
-  const handlePrevious = () => {
-    if (selectedDetailIndex !== null) {
-      setSelectedDetailIndex(null)
-    } else {
-      setCurrentIndex(prev => (prev - 1 + artworks.length) % artworks.length)
-      setZoom(1)
-    }
-  }
+  }, [handleNext, handlePrevious, isOpen, onClose])
 
   const currentArtwork = artworks[currentIndex]
   const isShowingDetail = selectedDetailIndex !== null && currentArtwork.detailImages
@@ -88,24 +95,32 @@ export function LightboxModal({
           aria-label="Artwork lightbox"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border px-6 py-4">
-            <div className="font-sans text-xs uppercase tracking-widest md:text-sm">
+          <div className="relative flex items-center justify-center border-b border-border px-14 py-4">
+            <div className="flex flex-col items-center gap-0.5 text-center">
               {isShowingDetail ? (
-                <>
+                <span className="font-sans text-xs uppercase tracking-widest md:text-sm">
                   {t.work.detailImages} • {selectedDetailIndex! + 1} / {currentArtwork.detailImages!.length}
-                </>
+                </span>
               ) : (
                 <>
-                  {currentArtwork.title}
-                  {currentArtwork.year && <>, {currentArtwork.year}</> }
-                  {currentArtwork.medium && <> | {currentArtwork.medium}</> }
-                  {currentArtwork.size && <> | {currentArtwork.size}</> }
+                  <span className="font-serif text-lg tracking-wide md:text-xl">
+                    {getLocalizedText(currentArtwork.title, language)}
+                  </span>
+                  {(currentArtwork.year || currentArtwork.medium || currentArtwork.size) && (
+                    <span className="font-sans text-sm text-muted-foreground md:text-base">
+                      {[
+                        currentArtwork.year,
+                        getLocalizedText(currentArtwork.medium, language),
+                        formatSize(currentArtwork.size, language),
+                      ].filter(Boolean).join(' | ')}
+                    </span>
+                  )}
                 </>
               )}
             </div>
             <button
               onClick={onClose}
-              className="p-2 transition-opacity hover:opacity-60 cursor-pointer"
+              className="absolute end-4 p-2 transition-opacity hover:opacity-60 cursor-pointer"
               aria-label="Close lightbox"
             >
               <X className="h-5 w-5" strokeWidth={1.5} />
@@ -142,13 +157,17 @@ export function LightboxModal({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="relative max-h-full max-w-full overflow-auto"
+              className="relative h-[70vh] w-[min(90vw,1200px)] overflow-hidden"
             >
-              <img
+              <Image
                 src={getImagePath(categoryKey, displayedImage)}
                 alt={isShowingDetail ? `Detail ${selectedDetailIndex! + 1}` : currentArtwork.title}
-                decoding="async"
-                className="max-h-[70vh] w-auto object-contain transition-transform duration-300"
+                fill
+                sizes="(min-width: 1280px) 1200px, 90vw"
+                placeholder="blur"
+                blurDataURL={getBlurDataUrl()}
+                priority
+                className="select-none object-contain transition-transform duration-300"
                 style={{ transform: `scale(${zoom})` }}
                 draggable={false}
               />
@@ -188,7 +207,7 @@ export function LightboxModal({
                       setSelectedDetailIndex(idx)
                       setZoom(1)
                     }}
-                    className="relative h-20 w-20 overflow-hidden border-2 border-border transition-colors hover:border-foreground cursor-pointer"
+                    className="relative h-20 w-20 overflow-hidden rounded-md border-2 border-border transition-colors hover:border-foreground cursor-pointer"
                     aria-label={`View detail ${idx + 1}`}
                   >
                     <Image

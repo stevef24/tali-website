@@ -18,8 +18,14 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const IMAGES_DIR = path.join(__dirname, '..', 'public', 'images');
-const CLOUDINARY_FOLDER = 'tali-portfolio';
+// Accept optional arguments: node scripts/upload-to-cloudinary.js [source-subfolder] [cloudinary-target-folder]
+// Examples:
+//   node scripts/upload-to-cloudinary.js                         # Upload all images from public/images/
+//   node scripts/upload-to-cloudinary.js humans-add              # Upload from public/images/humans-add/
+//   node scripts/upload-to-cloudinary.js humans-add "tali-portfolio/Human"  # Upload to specific Cloudinary folder
+const subFolder = process.argv[2] || '';
+const IMAGES_DIR = path.join(__dirname, '..', 'public', 'images', subFolder);
+const CLOUDINARY_FOLDER = process.argv[3] || 'tali-portfolio';
 
 async function uploadImages() {
   try {

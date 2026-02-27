@@ -23,15 +23,17 @@ type Translations = {
     title: string
     categories: {
       landscape: string
-      "my-dutch-heroes": string
+      organic: string
       "still-life": string
       human: string
       spheres: string
       "architecture-of-destruction": string
-      "master-copy": string
+      copies: string
     }
     backToGallery: string
     viewDetails: string
+    artwork: string
+    artworks: string
     mainImage: string
     detailImages: string
   }
@@ -54,6 +56,8 @@ type Translations = {
     send: string
     emailLabel: string
     whatsappLabel: string
+    success: string
+    error: string
   }
   footer: {
     rights: string
@@ -83,24 +87,25 @@ const translations: Record<Language, Translations> = {
     about: {
       title: "About the Artist",
       bio: [
-        "Tali Assa is a painter, psychologist, and jazz musician whose work emerges from four decades of parallel practice across these disciplines. Her artistic practice is rooted in intensive study at HaTachana studio under Aram Gershuni and David Nipo, where three years of daily observation drawing formed a foundation for understanding form, texture, and material.",
-        "Her work has evolved through a deliberate process of abstraction, moving beyond representation toward the textures and rhythms that animate her subjects. Drawing, for Assa, is a form of dreaming—an immersive dialogue with the object of observation where she dismantles and reassembles visual information into new compositional possibilities.",
-        "Her practice integrates three influences: psychodynamic theory informs her understanding of the subconscious in image-making, while her experience as a jazz musician introduces improvisation and harmonic thinking into the studio. Each work responds to what has accumulated on the surface, a continuous process of material investigation and formal discovery.",
+        "Tali Assa is a painter, psychologist, and jazz musician whose work emerges from four decades of parallel practice across these disciplines. Her artistic practice is rooted in intensive study at the Tachana Studio under the instruction of Aram Gershuni and David Nipo, where three years of painting from direct observation of human models and still life built the foundation of her technical and conceptual approach.",
+        "Over the years, her practice has evolved from naturalistic painting to abstraction. While her early work emphasized mimesis and realistic relationships of tonality and color, her more recent bodies of work shift the focus toward texture, rhythm, and the construction of abstract compositions.",
       ],
     },
     work: {
       title: "Artwork",
       categories: {
         landscape: "Landscape",
-        "my-dutch-heroes": "My Dutch Heroes",
+        organic: "Organic",
         "still-life": "Still Life",
         human: "Human",
         spheres: "Spheres",
         "architecture-of-destruction": "Architecture of Destruction",
-        "master-copy": "Master Copy",
+        copies: "Copies",
       },
       backToGallery: "Back to Gallery",
       viewDetails: "View Details",
+      artwork: "artwork",
+      artworks: "artworks",
       mainImage: "Main Image",
       detailImages: "Detail Images",
     },
@@ -162,6 +167,8 @@ const translations: Record<Language, Translations> = {
       send: "Send Message",
       emailLabel: "Email",
       whatsappLabel: "WhatsApp",
+      success: "Message sent — thank you!",
+      error: "Something went wrong. Please try again.",
     },
     footer: {
       rights: "All Rights Reserved",
@@ -189,24 +196,25 @@ const translations: Record<Language, Translations> = {
     about: {
       title: "על האמנית",
       bio: [
-        "טלי אסא היא ציירת, פסיכולוגית ומוזיקאית ג'אז שעבודתה מתגבשת מארבעת עשורים של פרקטיקה מקבילה בתחומים אלה. פרקטיקתה האמנותית משורשת בלימודים אינטנסיביים בסטודיו 'התחנה' בהנחיית ארם גרשוני ודוד ניפו, שם שלוש שנות ציור תצפית יומיומי יצרו יסוד להבנת צורה, מרקם וחומר.",
-        "עבודתה התפתחה דרך תהליך מכוון של הפשטה, קידום מעבר לייצוג לעבר המרקמים והקצבים המחייים את הנושאים שלה. הציור, עבור אסא, הוא צורה של חלימה—דיאלוג שקוע עם עצם התצפית שבו היא מפרקת ומרכיבת מחדש מידע ויזואלי לאפשרויות קומפוזיציוניות חדשות.",
-        "הפרקטיקה שלה משלבת שלוש השפעות: תיאוריה פסיכודינמית מדריכה את הבנתה של התת-הכרת ביצירת תמונה, בעוד שניסיונה כמוזיקאית ג'אז מכניסה אימפרוביזציה וחשיבה הרמונית לסטודיו. כל עבודה מגיבה למה שהצטבר על השטח, תהליך מתמשך של חקירה חומרית ותגלית פורמלית.",
+        "טלי אסא היא ציירת, פסיכולוגית ומוזיקאית ג׳אז, שעבודתה צומחת מתוך ארבעה עשורים של עיסוק מקביל בשלושת התחומים הללו. עשייתה האמנותית נטועה בלימוד אינטנסיבי בסטודיו התחנה בהנחיית ארם גרשוני ודוד ניפו, שם שלוש שנות ציור מתוך התבוננות ישירה במודלים חיים ובטבע דומם ביססו את התשתית הטכנית והרעיונית של עבודתה.",
+        "במהלך השנים התפתחה עבודתה מציור נטורליסטי אל עבר הפשטה. בעוד שעבודותיה המוקדמות הדגישו מימזיס ויחסים ריאליסטיים של טונאליות וצבע, בגופי העבודה המאוחרים יותר מושם הדגש על מרקם, קצב ובניית קומפוזיציות מופשטות.",
       ],
     },
     work: {
       title: "אומנות",
       categories: {
         landscape: "נוף",
-        "my-dutch-heroes": "הגיבורים ההולנדיים שלי",
+        organic: "אורגני",
         "still-life": "טבע דומם",
         human: "אנושי",
         spheres: "ספירות",
         "architecture-of-destruction": "ארכיטקטורה של הרס",
-        "master-copy": "העתק מאסטר",
+        copies: "העתקים",
       },
       backToGallery: "חזרה לגלריה",
       viewDetails: "צפה בפרטים",
+      artwork: "עבודה",
+      artworks: "עבודות",
       mainImage: "תמונה ראשית",
       detailImages: "תמונות פרטים",
     },
@@ -268,6 +276,8 @@ const translations: Record<Language, Translations> = {
       send: "שלח הודעה",
       emailLabel: "אימייל",
       whatsappLabel: "וואטסאפ",
+      success: "ההודעה נשלחה — תודה!",
+      error: "משהו השתבש. נסה שוב.",
     },
     footer: {
       rights: "כל הזכויות שמורות",

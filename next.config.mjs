@@ -2,9 +2,6 @@
 const isDev = process.env.NODE_ENV === 'development'
 
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   // Transpile Three.js packages for proper ESM handling
   transpilePackages: ['three'],
   images: {
@@ -25,6 +22,7 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year for static images
   },
   experimental: {
+    optimizePackageImports: ['lucide-react'],
     viewTransition: true,
   },
 }

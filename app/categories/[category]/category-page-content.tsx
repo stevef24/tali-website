@@ -5,12 +5,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useLanguage } from '@/lib/i18n'
+import { getLocalizedText, formatSize } from '@/lib/utils'
 import { getImagePath } from '@/lib/utils/image-paths'
 import type { CategoryData } from '@/lib/types/artwork'
 import { LightboxModal } from '@/components/lightbox-modal'
 import { ChevronLeft } from 'lucide-react'
-import { startTransition } from 'react'
-import { useRouter } from 'next/navigation'
 import { getBlurDataUrl } from '@/lib/utils/image-paths'
 
 interface CategoryPageContentProps {
@@ -20,8 +19,7 @@ interface CategoryPageContentProps {
 export function CategoryPageContent({ categoryData }: CategoryPageContentProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
-  const { t } = useLanguage()
-  const router = useRouter()
+  const { t, language } = useLanguage()
 
   const categoryTitle = t.work.categories[categoryData.key]
 
@@ -35,51 +33,69 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
             animate={{ opacity: 1, y: 0 }}
             className="mb-12"
           >
-            <button
-              onClick={() => startTransition(() => router.push('/#work'))}
-              className="mb-8 inline-flex items-center gap-2 font-sans text-sm uppercase tracking-widest transition-opacity hover:opacity-60"
+            <Link
+              href="/#work"
+              className="mb-8 inline-flex items-center gap-2 font-sans text-sm uppercase tracking-widest transition-opacity hover:opacity-60 cursor-pointer"
             >
               <ChevronLeft className="h-4 w-4 rtl:rotate-180" strokeWidth={1.5} />
               {t.work.backToGallery}
-            </button>
+            </Link>
             <h1 className="font-serif text-4xl tracking-tight md:text-5xl">{categoryTitle}</h1>
             <p className="mt-4 font-sans text-sm text-muted-foreground">
-              {categoryData.artworks.length} {categoryData.artworks.length === 1 ? 'artwork' : 'artworks'}
+              {categoryData.artworks.length} {categoryData.artworks.length === 1 ? t.work.artwork : t.work.artworks}
             </p>
           </motion.div>
 
           {/* Image grid */}
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
             {categoryData.artworks.map((artwork, index) => (
-              <motion.button
+              <motion.div
                 key={artwork.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                onClick={() => {
-                  setSelectedIndex(index)
-                  setIsLightboxOpen(true)
-                }}
-                className="group relative aspect-square overflow-hidden bg-muted"
+                className="flex flex-col"
               >
-                <Image
-                  src={getImagePath(categoryData.key, artwork.filename)}
-                  alt={artwork.title}
-                  fill
-                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-                  placeholder="blur"
-                  blurDataURL={getBlurDataUrl()}
-                  className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-70"
-                />
-                {artwork.detailImages && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedIndex(index)
+                    setIsLightboxOpen(true)
+                  }}
+                  aria-label={`${t.work.viewDetails}: ${getLocalizedText(artwork.title, language)}`}
+                  className="group relative aspect-square overflow-hidden rounded-lg bg-muted cursor-pointer"
+                >
+                  <Image
+                    src={getImagePath(categoryData.key, artwork.filename)}
+                    alt={getLocalizedText(artwork.title, language)}
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                    placeholder="blur"
+                    blurDataURL={getBlurDataUrl()}
+                    className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-70"
+                  />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <span className="bg-background/90 px-3 py-2 font-sans text-xs uppercase tracking-widest">
                       {t.work.viewDetails}
                     </span>
                   </div>
-                )}
-              </motion.button>
+                </button>
+                <div className="mt-3 space-y-0.5 text-center">
+                  <p className="font-serif text-sm tracking-wide">
+                    {getLocalizedText(artwork.title, language)}
+                  </p>
+                  {(artwork.year || artwork.medium || artwork.size) && (
+                    <p className="font-sans text-xs text-muted-foreground">
+                      {[
+                        artwork.year,
+                        getLocalizedText(artwork.medium, language),
+                        formatSize(artwork.size, language),
+                      ].filter(Boolean).join(' | ')}
+                    </p>
+                  )}
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>

@@ -27,21 +27,18 @@ export function AboutSection() {
 						whileInView={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
 						viewport={{ once: true, amount: 0.3 }}
 						transition={{ duration: 1.2, ease: EASE_LUXURY }}
-						className="md:col-span-2 flex flex-col justify-center h-[300px] md:h-auto"
+						className="md:col-span-2 flex items-center"
 					>
-						<motion.div
-							className="relative flex-1 bg-muted overflow-hidden rounded-sm"
-						>
-							<Image
-								src="https://res.cloudinary.com/dcmflt2on/image/upload/v1766090020/tali-portfolio/tali-photo.png"
-								alt="Portrait of Tali Assa"
-								fill
-								sizes="(min-width: 768px) 40vw, 100vw"
-								placeholder="blur"
-								blurDataURL={getBlurDataUrl()}
-								className="object-cover object-center bg-none"
-							/>
-						</motion.div>
+						<Image
+							src="/images/tali-photo.jpg"
+							alt="Portrait of Tali Assa"
+							width={600}
+							height={800}
+							sizes="(min-width: 768px) 40vw, 100vw"
+							placeholder="blur"
+							blurDataURL={getBlurDataUrl()}
+							className="w-full h-auto rounded-lg"
+						/>
 					</motion.div>
 					<div className="flex flex-col justify-center md:col-span-3">
 						<div className="space-y-6 font-sans text-base leading-relaxed text-foreground/80 md:text-lg">

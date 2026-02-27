@@ -31,8 +31,8 @@ export function getImagePath(categoryKey: CategoryKey, filename: string): string
   const publicId = `tali-portfolio/${folderName}/${baseFilename}`
 
   // Build Cloudinary URL with optimization
-  // Note: Don't encode the full path - just ensure each segment is URL-safe
-  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,w_1200,h_1200,c_limit/${publicId}.jpg`
+  const encodedPublicId = encodePathSegments(publicId)
+  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/upload/q_auto,f_auto,w_1200,h_1200,c_limit/${encodedPublicId}.jpg`
 
   return cloudinaryUrl
 }
@@ -59,14 +59,15 @@ export function getCanvasImagePath(categoryKey: CategoryKey, filename: string): 
 
   // Canvas-optimized: 512px width, 80% quality, auto format
   // This reduces file size from ~1MB to ~50KB per image
-  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/upload/q_80,f_auto,w_512,c_limit/${publicId}.jpg`
+  const encodedPublicId = encodePathSegments(publicId)
+  const cloudinaryUrl = `https://res.cloudinary.com/${cloudName}/image/upload/q_80,f_auto,w_512,c_limit/${encodedPublicId}.jpg`
 
   return cloudinaryUrl
 }
 
 /**
  * Get category slug from category key
- * Example: getCategorySlug('my-dutch-heroes') => 'my-dutch-heroes'
+ * Example: getCategorySlug('organic') => 'organic'
  */
 export function getCategorySlug(key: CategoryKey): string {
   const category = artworkCategories.find(cat => cat.key === key)
@@ -75,7 +76,7 @@ export function getCategorySlug(key: CategoryKey): string {
 
 /**
  * Get category key from slug (for dynamic routes)
- * Example: getCategoryFromSlug('my-dutch-heroes') => 'my-dutch-heroes'
+ * Example: getCategoryFromSlug('organic') => 'organic'
  */
 export function getCategoryFromSlug(slug: string): CategoryKey | undefined {
   const category = artworkCategories.find(cat => cat.slug === slug)

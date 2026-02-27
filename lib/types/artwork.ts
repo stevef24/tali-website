@@ -3,9 +3,9 @@ export type CategoryKey =
   | 'human'
   | 'spheres'
   | 'architecture-of-destruction'
-  | 'my-dutch-heroes'
+  | 'organic'
   | 'still-life'
-  | 'master-copy'
+  | 'copies'
 
 export interface Artwork {
   id: string // slug-friendly ID
