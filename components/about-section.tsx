@@ -30,10 +30,10 @@ export function AboutSection() {
 						className="md:col-span-2 flex items-center"
 					>
 						<Image
-							src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/q_auto,f_auto,w_800/tali-portfolio/tali-photo.jpg`}
+							src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/q_auto,f_auto,w_800/v1772211799/tali-portfolio/tali-photo.jpg`}
 							alt="Portrait of Tali Assa"
-							width={600}
-							height={800}
+							width={700}
+							height={662}
 							sizes="(min-width: 768px) 40vw, 100vw"
 							placeholder="blur"
 							blurDataURL={getBlurDataUrl()}
