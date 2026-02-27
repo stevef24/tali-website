@@ -106,7 +106,7 @@ export function Header() {
             className="fixed inset-0 z-50 bg-background"
           >
             <div className="mx-auto flex h-16 md:h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-              <span className="font-serif text-2xl md:text-4xl tracking-tight">Tali Assa</span>
+              <span className="font-serif text-2xl md:text-4xl tracking-tight">Tali Assa Art</span>
               <button
                 onClick={() => setIsOpen(false)}
                 data-magnetic

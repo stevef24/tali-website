@@ -253,7 +253,7 @@ export function ContactSection() {
                   >
                     Facebook
                   </a>
-                  <span className="text-muted-foreground">|</span>
+                  <span className="text-muted-foreground">·</span>
                   <a
                     href="https://www.instagram.com/tali_assa"
                     target="_blank"
