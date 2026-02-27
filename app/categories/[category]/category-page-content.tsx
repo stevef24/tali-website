@@ -22,6 +22,7 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
   const { t, language } = useLanguage()
 
   const categoryTitle = t.work.categories[categoryData.key]
+  const categoryDescription = t.work.categoryDescriptions[categoryData.key]
 
   return (
     <>
@@ -41,6 +42,16 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
               {t.work.backToGallery}
             </Link>
             <h1 className="font-serif text-4xl tracking-tight md:text-5xl">{categoryTitle}</h1>
+            {categoryDescription && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="mt-6 max-w-3xl font-serif text-lg leading-relaxed text-foreground/70 md:text-xl md:leading-relaxed"
+              >
+                {categoryDescription}
+              </motion.p>
+            )}
             <p className="mt-4 font-sans text-sm text-muted-foreground">
               {categoryData.artworks.length} {categoryData.artworks.length === 1 ? t.work.artwork : t.work.artworks}
             </p>
