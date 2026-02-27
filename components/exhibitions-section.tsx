@@ -8,14 +8,14 @@ export function ExhibitionsSection() {
   const { t } = useLanguage()
 
   return (
-    <section id="exhibitions" className="bg-muted/30 px-6 py-12 md:py-24 lg:px-8">
+    <section id="exhibitions" className="bg-muted/30 px-6 py-6 md:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.h2
           initial={{ opacity: 0, filter: "blur(20px)" }}
           whileInView={{ opacity: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
           transition={{ duration: 1.0, ease: EASE_LUXURY }}
-          className="mb-8 md:mb-16 font-serif text-fluid-3xl tracking-tight"
+          className="mb-4 md:mb-16 font-serif text-fluid-3xl tracking-tight"
         >
           {t.exhibitions.title}
         </motion.h2>

@@ -42,10 +42,10 @@ export function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+        <div className="mx-auto flex h-16 md:h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
           <a
             href="#"
-            className="font-serif text-4xl tracking-tight cursor-pointer relative inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
+            className="font-serif text-2xl md:text-4xl tracking-tight cursor-pointer relative inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
           >
             Tali Assa Art
           </a>
@@ -105,8 +105,8 @@ export function Header() {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-50 bg-background"
           >
-            <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-              <span className="font-serif text-4xl tracking-tight">Tali Assa</span>
+            <div className="mx-auto flex h-16 md:h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+              <span className="font-serif text-2xl md:text-4xl tracking-tight">Tali Assa</span>
               <button
                 onClick={() => setIsOpen(false)}
                 data-magnetic

@@ -38,7 +38,7 @@ export function HeroSection() {
   const mobile = typeof window !== "undefined" ? isMobile() : false
 
   return (
-    <section className="relative flex min-h-screen items-center justify-center px-6 pt-20 md:px-8">
+    <section className="relative flex min-h-[80vh] md:min-h-screen items-center justify-center px-6 pt-16 md:pt-20 md:px-8">
       <motion.div
         initial={reducedMotion ? { opacity: 1, filter: "blur(0px)", scale: mobile ? 1 : 1.2 } : { opacity: 0, filter: "blur(20px)", scale: 0.95 }}
         animate={{ opacity: 1, filter: "blur(0px)", scale: mobile ? 1 : 1.2 }}
@@ -53,14 +53,14 @@ export function HeroSection() {
         }}
         className="relative w-full max-w-5xl md:max-w-5xl"
       >
-        <div className="relative aspect-square w-full overflow-hidden bg-muted md:aspect-video rounded-lg">
+        <div className="relative aspect-square w-full overflow-hidden bg-background dark:bg-black md:aspect-video rounded-lg">
           <MuxPlayer
             playbackId={process.env.NEXT_PUBLIC_MUX_PLAYBACK_ID || "KphmhwQt5JBU02hfqx2Isf5Z01qcCsawlxSbdXy02RY01C8"}
             autoPlay={!reducedMotion}
             muted
             loop
             playsInline
-            className="h-full w-full [--media-background-color:transparent]"
+            className="h-full w-full [--media-background-color:transparent] dark:[--media-background-color:black]"
             metadata={{
               videoTitle: "Tali Assa - Artist Portfolio",
               viewerUserId: "portfolio-visitor",
