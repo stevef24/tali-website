@@ -30,7 +30,7 @@ export function AboutSection() {
 						className="md:col-span-2 flex items-center"
 					>
 						<Image
-							src="/images/tali-photo.jpg"
+							src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/q_auto,f_auto,w_800/tali-portfolio/tali-photo.jpg`}
 							alt="Portrait of Tali Assa"
 							width={600}
 							height={800}
