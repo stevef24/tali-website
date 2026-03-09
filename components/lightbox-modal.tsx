@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from 'lucide-react'
@@ -82,7 +83,11 @@ export function LightboxModal({
     ? currentArtwork.detailImages![selectedDetailIndex]
     : currentArtwork.filename
 
-  return (
+  if (typeof document === 'undefined') {
+    return null
+  }
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && currentArtwork && (
         <motion.div
@@ -238,6 +243,7 @@ export function LightboxModal({
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   )
 }
