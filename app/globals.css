@@ -319,10 +319,7 @@ main {
   color: rgb(var(--media-overlay-text-rgb));
 }
 
-.lightbox-media-frame {
-  width: 100%;
-  height: 100%;
-}
+/* lightbox-media-frame: dimensions handled by Tailwind flex utilities */
 
 .mobile-menu-panel {
   height: calc(100vh - 5rem);

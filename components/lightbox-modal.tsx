@@ -128,7 +128,7 @@ export function LightboxModal({
           </div>
 
           {/* Main image area */}
-          <div className="relative flex flex-1 items-center justify-center overflow-hidden p-2 md:p-8">
+          <div className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden p-2 md:p-8">
             {/* Navigation arrows */}
             {!isShowingDetail && (
               <>
@@ -157,7 +157,7 @@ export function LightboxModal({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              className="relative lightbox-media-frame overflow-hidden"
+              className="relative h-full w-full max-w-[75rem] overflow-hidden"
             >
               <Image
                 src={getImagePath(categoryKey, displayedImage)}
