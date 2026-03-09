@@ -128,7 +128,7 @@ export function LightboxModal({
           </div>
 
           {/* Main image area */}
-          <div className="relative flex flex-1 items-center justify-center overflow-hidden p-8">
+          <div className="relative flex flex-1 items-center justify-center overflow-hidden p-2 md:p-8">
             {/* Navigation arrows */}
             {!isShowingDetail && (
               <>
