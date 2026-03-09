@@ -18,6 +18,9 @@ interface LightboxModalProps {
   categoryKey: CategoryKey
 }
 
+const navigationButtonClassName =
+  'absolute z-10 flex h-11 w-11 items-center justify-center rounded-full border border-border/80 bg-background/80 shadow-[0_6px_18px_rgba(0,0,0,0.18)] backdrop-blur-sm transition-all hover:scale-[1.03] hover:bg-background/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 md:h-12 md:w-12 cursor-pointer'
+
 export function LightboxModal({
   artworks,
   initialIndex,
@@ -139,7 +142,7 @@ export function LightboxModal({
               <>
                 <button
                   onClick={handlePrevious}
-                  className="absolute start-4 z-10 p-2 transition-opacity hover:opacity-60 md:start-8 cursor-pointer"
+                  className={`${navigationButtonClassName} start-4 md:start-8`}
                   aria-label="Previous artwork"
                 >
                   <ChevronLeft className="h-8 w-8 rtl:rotate-180" strokeWidth={1} />
@@ -147,7 +150,7 @@ export function LightboxModal({
 
                 <button
                   onClick={handleNext}
-                  className="absolute end-4 z-10 p-2 transition-opacity hover:opacity-60 md:end-8 cursor-pointer"
+                  className={`${navigationButtonClassName} end-4 md:end-8`}
                   aria-label="Next artwork"
                 >
                   <ChevronRight className="h-8 w-8 rtl:rotate-180" strokeWidth={1} />

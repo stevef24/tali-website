@@ -80,6 +80,29 @@ describe('LightboxModal', () => {
     expect(screen.getByText('Anna')).toBeInTheDocument()
   })
 
+  it('renders circular navigation controls with contrast styling', async () => {
+    render(
+      <LightboxModal
+        artworks={[...artworks]}
+        initialIndex={0}
+        isOpen
+        onClose={() => {}}
+        categoryKey="human"
+      />,
+    )
+
+    const previousButton = await screen.findByRole('button', { name: 'Previous artwork' })
+    const nextButton = screen.getByRole('button', { name: 'Next artwork' })
+
+    expect(previousButton.className).toContain('rounded-full')
+    expect(previousButton.className).toContain('bg-background/80')
+    expect(previousButton.className).toContain('border')
+
+    expect(nextButton.className).toContain('rounded-full')
+    expect(nextButton.className).toContain('bg-background/80')
+    expect(nextButton.className).toContain('border')
+  })
+
   it('locks body scroll while open and restores it when closed', async () => {
     const { rerender } = render(
       <LightboxModal
