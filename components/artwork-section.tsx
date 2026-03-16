@@ -1,15 +1,13 @@
 "use client"
 
 import type React from "react"
-import { useRef } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { motion, type MotionValue, useScroll, useTransform } from "framer-motion"
+import { motion } from "framer-motion"
 import { useLanguage } from "@/lib/i18n"
 import { artworkCategories } from "@/lib/data/artwork-data"
 import { getImagePath } from "@/lib/utils/image-paths"
 import { EASE_LUXURY } from "@/lib/animations"
-import { isMobile } from "@/lib/animations"
 import type { CategoryKey } from "@/lib/types/artwork"
 
 interface DesktopCategoryCardProps {
@@ -18,8 +16,6 @@ interface DesktopCategoryCardProps {
   previewImage: string
   categoryTitle: string
   index: number
-  scrollYProgress: MotionValue<number>
-  mobile: boolean
   onClick: (slug: string) => void
 }
 
@@ -29,18 +25,12 @@ function DesktopCategoryCard({
   previewImage,
   categoryTitle,
   index,
-  scrollYProgress,
-  mobile,
   onClick,
 }: DesktopCategoryCardProps) {
-  const columnIndex = index % 4
-  const isEven = columnIndex % 2 === 0
-  const y = useTransform(scrollYProgress, [0, 1], isEven ? [0, -50] : [0, 50])
-
   return (
     <motion.button
-      initial={{ opacity: 0, y: 40, scale: 0.94, filter: "blur(12px)" }}
-      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       whileHover={{
         scale: 1.05,
         transition: { duration: 0.4, ease: EASE_LUXURY }
@@ -48,12 +38,11 @@ function DesktopCategoryCard({
       viewport={{ once: true, amount: 0.3 }}
       transition={{
         delay: index * 0.04,
-        duration: 0.8,
+        duration: 0.6,
         ease: EASE_LUXURY,
       }}
       style={
         {
-          y: mobile ? 0 : y,
           viewTransitionName: `artwork-${categoryKey}`,
         } as React.CSSProperties
       }
@@ -80,20 +69,12 @@ function DesktopCategoryCard({
 export function ArtworkSection() {
   const router = useRouter()
   const { t } = useLanguage()
-  const sectionRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  })
-
-  const mobile = typeof window !== "undefined" ? isMobile() : false
-
   return (
-    <section id="work" ref={sectionRef} className="px-6 py-6 md:py-24 lg:px-8">
+    <section id="work" className="px-6 py-6 md:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.h2
-          initial={{ opacity: 0, filter: "blur(20px)" }}
-          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.0, ease: EASE_LUXURY }}
           className="mb-4 md:mb-16 font-serif text-fluid-3xl tracking-tight"
@@ -111,8 +92,6 @@ export function ArtworkSection() {
               previewImage={category.previewImage}
               categoryTitle={t.work.categories[category.key]}
               index={index}
-              scrollYProgress={scrollYProgress}
-              mobile={mobile}
               onClick={(slug) => router.push(`/categories/${slug}`)}
             />
           ))}
@@ -125,8 +104,8 @@ export function ArtworkSection() {
             return (
               <motion.button
                 key={category.key}
-                initial={{ opacity: 0, y: 20, filter: "blur(12px)" }}
-                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{
                   delay: index * 0.04,

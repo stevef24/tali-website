@@ -10,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
  * "טקסט בעברית | English text". Falls back to the first part if no English is present.
  */
 export function getLocalizedText(text: string | undefined, language: 'en' | 'he'): string {
-  if (!text) return ''
+  if (!text) return language === 'he' ? 'ללא כותרת' : 'Untitled'
   const [hePart, enPart] = text.split(' | ').map(s => s.trim())
   if (language === 'he') return hePart
   return enPart || hePart
