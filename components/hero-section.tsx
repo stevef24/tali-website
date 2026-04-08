@@ -56,6 +56,7 @@ export function HeroSection() {
         <div className="relative aspect-square w-full overflow-hidden bg-background dark:bg-black md:aspect-video rounded-lg">
           <MuxPlayer
             playbackId={process.env.NEXT_PUBLIC_MUX_PLAYBACK_ID || "KphmhwQt5JBU02hfqx2Isf5Z01qcCsawlxSbdXy02RY01C8"}
+            poster={`https://image.mux.com/${process.env.NEXT_PUBLIC_MUX_PLAYBACK_ID || "KphmhwQt5JBU02hfqx2Isf5Z01qcCsawlxSbdXy02RY01C8"}/thumbnail.webp?time=0`}
             autoPlay={!reducedMotion}
             muted
             loop
