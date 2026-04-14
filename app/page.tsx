@@ -5,13 +5,12 @@ import { AboutSection } from "@/components/about-section"
 import { ExhibitionsSection } from "@/components/exhibitions-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
-import { BackgroundShapes } from "@/components/background-shapes"
+
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
       <h1 className="sr-only">Tali Assa Art</h1>
-      <BackgroundShapes />
       <Header />
       <HeroSection />
       <ArtworkSection />

@@ -450,7 +450,7 @@ export const artworkCategories: CategoryData[] = [
 			{
 				id: "sphere-10",
 				filename: "original_490a62cb-af7c-4d04-8156-4b6cebf7c874_20240627_182059.jpg",
-				title: "מלכות | Queens",
+				title: "מלכות | Kingship",
 				year: "2024",
 				medium: "פסטל על נייר | Pastel on paper",
 				size: "140×200 ס\"מ",
@@ -628,7 +628,7 @@ export const artworkCategories: CategoryData[] = [
 			{
 				id: "organic-11",
 				filename: "IMG_7772.JPG",
-				title: "על פי באלן וברויגל | After Ballen and Bruegel",
+				title: "בעקבות באלן וברויגל | After Ballen and Bruegel",
 				year: "2022",
 				medium: "פחם על נייר | Charcoal on paper",
 				size: '50×70 ס"מ',
@@ -801,7 +801,7 @@ export const artworkCategories: CategoryData[] = [
 			{
 				id: "copies-2",
 				filename: "After Bargue 2012 Graphite on paper 3045 cm.jpg",
-				title: "על פי בארג | After Bargue",
+				title: "בעקבות בארג | After Bargue",
 				year: "2012",
 				medium: "גרפיט על נייר | Graphite on paper",
 				size: '30×45 ס"מ',
@@ -809,7 +809,7 @@ export const artworkCategories: CategoryData[] = [
 			{
 				id: "copies-3",
 				filename: "After Schiele 2014 oil on paper mounted on wood 2832 cm.jpg",
-				title: "על פי שילה | After Schiele",
+				title: "בעקבות שילה | After Schiele",
 				year: "2014",
 				medium: "שמן על נייר מוצמד לעץ | Oil on paper mounted on wood",
 				size: '28×32 ס"מ',
@@ -817,7 +817,7 @@ export const artworkCategories: CategoryData[] = [
 			{
 				id: "copies-4",
 				filename: "After Seurat 2014 Oil on wood 2931 cm.jpg",
-				title: "על פי סרה | After Seurat",
+				title: "בעקבות סרה | After Seurat",
 				year: "2014",
 				medium: "שמן על עץ | Oil on wood",
 				size: '29×31 ס"מ',
@@ -825,7 +825,7 @@ export const artworkCategories: CategoryData[] = [
 			{
 				id: "copies-5",
 				filename: "Augustus of Porta after Bargue 2012 Charcoal and Graphite on paper 5070 cm.jpg",
-				title: "אוגוסטוס מפורטה על פי בארג | Augustus of Porta after Bargue",
+				title: "אוגוסטוס מפורטה בעקבות בארג | Augustus of Porta after Bargue",
 				year: "2012",
 				medium: "פחם וגרפיט על נייר | Charcoal and graphite on paper",
 				size: '50×70 ס"מ',
@@ -849,7 +849,7 @@ export const artworkCategories: CategoryData[] = [
 			{
 				id: "copies-9",
 				filename: "20260129_132706.jpg",
-				title: "על פי בארג | After Bargue",
+				title: "בעקבות בארג | After Bargue",
 				year: "2012",
 				medium: "גרפיט על נייר | Graphite on paper",
 				size: '30×45 ס"מ',
