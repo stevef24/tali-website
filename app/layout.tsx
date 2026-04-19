@@ -26,11 +26,87 @@ const geistMono = Geist_Mono({
   variable: "--font-mono",
 })
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://taliassa.art"
+const siteDescription =
+  "Portfolio of Tali Assa — painter, psychologist, and jazz musician. A body of work spanning landscape, human studies, spheres, architecture of destruction, organic forms, still life, and master copies."
+
 export const metadata: Metadata = {
-  title: "Tali Assa Art",
-  description:
-    "Portfolio of Tali Assa, a painter, psychologist, and musician exploring abstraction, texture, and the boundaries between observation and imagination.",
-    generator: 'v0.app'
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Tali Assa Art — Painter, Psychologist, Musician",
+    template: "%s — Tali Assa Art",
+  },
+  description: siteDescription,
+  applicationName: "Tali Assa Art",
+  authors: [{ name: "Tali Assa" }],
+  creator: "Tali Assa",
+  publisher: "Tali Assa",
+  keywords: [
+    "Tali Assa",
+    "Tali Assa Art",
+    "Israeli artist",
+    "contemporary painting",
+    "charcoal drawing",
+    "pastel art",
+    "oil painting",
+    "art portfolio",
+    "spheres series",
+    "architecture of destruction",
+    "landscape painting",
+    "fine art",
+    "MFA Haifa",
+  ],
+  alternates: {
+    canonical: "/",
+    languages: {
+      en: "/",
+      he: "/",
+      "x-default": "/",
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    alternateLocale: ["he_IL"],
+    url: siteUrl,
+    title: "Tali Assa Art — Painter, Psychologist, Musician",
+    description: siteDescription,
+    siteName: "Tali Assa Art",
+    images: [
+      {
+        url: "/female-artist-portrait-professional.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Tali Assa — artist portrait",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Tali Assa Art",
+    description: siteDescription,
+    images: ["/female-artist-portrait-professional.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon-light-32x32.png", sizes: "32x32", media: "(prefers-color-scheme: light)" },
+      { url: "/icon-dark-32x32.png", sizes: "32x32", media: "(prefers-color-scheme: dark)" },
+    ],
+    apple: "/apple-icon.png",
+  },
+  category: "art",
 }
 
 export default function RootLayout({

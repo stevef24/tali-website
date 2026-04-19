@@ -153,6 +153,17 @@ html {
   cursor: none;
 }
 
+/* Anchor offset so jump-links don't hide content under the sticky header */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
+@media (max-width: 47.998rem) {
+  section[id] {
+    scroll-margin-top: 4rem;
+  }
+}
+
 @media (pointer: coarse) {
   html {
     cursor: auto;
