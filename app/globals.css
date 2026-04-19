@@ -358,23 +358,15 @@ a:not(.no-underline):hover {
    Enhanced Focus States (WCAG AAA)
    ============================================ */
 
-input:focus,
-textarea:focus,
+/* Use :focus-visible everywhere — avoids visible rings on mouse-clicked buttons.
+   Keep ring static (no infinite pulse) so it doesn't distract while typing. */
+input:focus-visible,
+textarea:focus-visible,
 button:focus-visible,
-a:focus-visible {
+a:focus-visible,
+[role="button"]:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
-  animation: ring-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@keyframes ring-pulse {
-  0%, 100% {
-    outline-color: var(--ring);
-    opacity: 1;
-  }
-
-  50% {
-    outline-color: var(--foreground);
-    opacity: 0.7;
-  }
-}
+/* Reduce motion users get the same static ring — no animation either way */

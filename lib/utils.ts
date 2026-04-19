@@ -9,8 +9,16 @@ export function cn(...inputs: ClassValue[]) {
  * Extracts the correct language half from a bilingual string formatted as
  * "טקסט בעברית | English text". Falls back to the first part if no English is present.
  */
-export function getLocalizedText(text: string | undefined, language: 'en' | 'he'): string {
-  if (!text) return language === 'he' ? 'ללא כותרת' : 'Untitled'
+export function getLocalizedText(text: unknown, language: 'en' | 'he'): string {
+  if (text == null || text === '') {
+    return language === 'he' ? 'ללא כותרת' : 'Untitled'
+  }
+  if (typeof text !== 'string') {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[getLocalizedText] expected a "HE | EN" string, got:', text)
+    }
+    return language === 'he' ? 'ללא כותרת' : 'Untitled'
+  }
   const [hePart, enPart] = text.split(' | ').map(s => s.trim())
   if (language === 'he') return hePart
   return enPart || hePart

@@ -149,18 +149,18 @@ export function LightboxModal({
         >
           {/* Header */}
           <div className="relative flex items-center justify-center border-b border-border px-14 py-4">
-            <div className="flex flex-col items-center gap-0.5 text-center">
+            <div className="flex min-w-0 max-w-[min(90%,40rem)] flex-col items-center gap-0.5 text-center">
               {isShowingDetail ? (
-                <span className="font-sans text-xs uppercase tracking-widest md:text-sm">
+                <span className="truncate font-sans text-xs uppercase tracking-widest md:text-sm">
                   {t.work.detailImages} • {selectedDetailIndex! + 1} / {currentArtwork.detailImages!.length}
                 </span>
               ) : (
                 <>
-                  <span className="font-serif text-lg tracking-wide md:text-xl">
+                  <span className="truncate font-serif text-lg tracking-wide md:text-xl">
                     {getLocalizedText(currentArtwork.title, language)}
                   </span>
                   {(currentArtwork.year || currentArtwork.medium || currentArtwork.size) && (
-                    <span className="font-sans text-sm text-muted-foreground md:text-base">
+                    <span className="truncate font-sans text-sm text-muted-foreground md:text-base">
                       {[
                         currentArtwork.year,
                         getLocalizedText(currentArtwork.medium, language),
