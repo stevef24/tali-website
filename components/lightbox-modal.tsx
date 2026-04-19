@@ -188,7 +188,7 @@ export function LightboxModal({
                 <button
                   onClick={handlePrevious}
                   className={navigationButtonClassName}
-                  aria-label={getLocalizedText({ en: 'Previous artwork', he: 'יצירה קודמת' }, language)}
+                  aria-label={language === 'he' ? 'יצירה קודמת' : 'Previous artwork'}
                 >
                   <ChevronLeft className="h-7 w-7 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
                 </button>
@@ -240,7 +240,7 @@ export function LightboxModal({
                     className="md:hidden pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground/10 px-3 py-1.5 backdrop-blur-sm"
                   >
                     <span className="font-sans text-[11px] uppercase tracking-widest text-foreground/80">
-                      {getLocalizedText({ en: 'Swipe to navigate', he: 'החליקו לניווט' }, language)}
+                      {language === 'he' ? 'החליקו לניווט' : 'Swipe to navigate'}
                     </span>
                   </motion.div>
                 )}
@@ -253,7 +253,7 @@ export function LightboxModal({
                 <button
                   onClick={handleNext}
                   className={navigationButtonClassName}
-                  aria-label={getLocalizedText({ en: 'Next artwork', he: 'יצירה הבאה' }, language)}
+                  aria-label={language === 'he' ? 'יצירה הבאה' : 'Next artwork'}
                 >
                   <ChevronRight className="h-7 w-7 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
                 </button>
