@@ -402,10 +402,6 @@ export const artworkCategories: CategoryData[] = [
 				year: "2024",
 				medium: "פסטל על נייר | Pastel on paper",
 				size: "70×100 ס\"מ",
-				detailImages: [
-					"detail 2/PHOTO-2025-tali 12-13-16-42-49 4-gigapixel-standard-scale-4_00x.jpg",
-					"detail 2/PHOTO-202tali 5-12-13-16-42-50-gigapixel-standard-scale-4_00x.jpg",
-				],
 			},
 			{
 				id: "sphere-5",
