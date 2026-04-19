@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { motion, AnimatePresence, type PanInfo } from 'framer-motion'
@@ -23,7 +23,8 @@ interface LightboxModalProps {
 const navigationButtonClassName =
   'hidden md:flex z-10 h-10 w-10 items-center justify-center rounded-full text-foreground/50 transition-all duration-300 hover:text-foreground hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
 
-const SWIPE_HINT_KEY = 'lightbox-swipe-hint-seen'
+const counterButtonClassName =
+  'flex h-7 w-7 items-center justify-center rounded-full text-foreground/40 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
 
 export function LightboxModal({
   artworks,
@@ -35,8 +36,6 @@ export function LightboxModal({
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [zoom, setZoom] = useState(1)
   const [selectedDetailIndex, setSelectedDetailIndex] = useState<number | null>(null)
-  const [showSwipeHint, setShowSwipeHint] = useState(false)
-  const swipeHintTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { t, language } = useLanguage()
 
   // Reset states and lock body scroll when modal opens/closes
@@ -46,36 +45,13 @@ export function LightboxModal({
       setZoom(1)
       setSelectedDetailIndex(null)
       document.body.style.overflow = 'hidden'
-
-      // Show one-time swipe hint on touch devices
-      const isTouch =
-        typeof window !== 'undefined' &&
-        ('ontouchstart' in window || navigator.maxTouchPoints > 0)
-      const seen =
-        typeof window !== 'undefined' && window.localStorage.getItem(SWIPE_HINT_KEY)
-      if (isTouch && !seen && artworks.length > 1) {
-        setShowSwipeHint(true)
-        swipeHintTimer.current = setTimeout(() => {
-          setShowSwipeHint(false)
-          window.localStorage.setItem(SWIPE_HINT_KEY, '1')
-        }, 2400)
-      }
     } else {
       document.body.style.overflow = ''
-      setShowSwipeHint(false)
-      if (swipeHintTimer.current) {
-        clearTimeout(swipeHintTimer.current)
-        swipeHintTimer.current = null
-      }
     }
     return () => {
       document.body.style.overflow = ''
-      if (swipeHintTimer.current) {
-        clearTimeout(swipeHintTimer.current)
-        swipeHintTimer.current = null
-      }
     }
-  }, [isOpen, initialIndex, artworks.length])
+  }, [isOpen, initialIndex])
 
   const handleNext = useCallback(() => {
     if (selectedDetailIndex !== null) {
@@ -229,22 +205,6 @@ export function LightboxModal({
                 draggable={false}
               />
 
-              {/* Mobile swipe hint — appears once, fades out */}
-              <AnimatePresence>
-                {showSwipeHint && !isShowingDetail && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
-                    transition={{ duration: 0.4 }}
-                    className="md:hidden pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-foreground/10 px-3 py-1.5 backdrop-blur-sm"
-                  >
-                    <span className="font-sans text-[11px] uppercase tracking-widest text-foreground/80">
-                      {language === 'he' ? 'החליקו לניווט' : 'Swipe to navigate'}
-                    </span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </motion.div>
 
             {/* Right gutter (desktop arrow) */}
@@ -262,7 +222,34 @@ export function LightboxModal({
           </div>
 
           {/* Zoom controls and detail images section */}
-          <div className="space-y-4 border-t border-border px-6 py-4">
+          <div className="space-y-3 border-t border-border px-6 py-4">
+            {/* Persistent navigation indicator — always visible, tappable */}
+            {!isShowingDetail && artworks.length > 1 && (
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  onClick={handlePrevious}
+                  className={counterButtonClassName}
+                  aria-label={language === 'he' ? 'יצירה קודמת' : 'Previous artwork'}
+                >
+                  <ChevronLeft className="h-4 w-4 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
+                </button>
+                <span
+                  className="font-sans text-[11px] uppercase tracking-widest text-foreground/50 tabular-nums select-none"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
+                  {currentIndex + 1} / {artworks.length}
+                </span>
+                <button
+                  onClick={handleNext}
+                  className={counterButtonClassName}
+                  aria-label={language === 'he' ? 'יצירה הבאה' : 'Next artwork'}
+                >
+                  <ChevronRight className="h-4 w-4 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
+                </button>
+              </div>
+            )}
+
             {/* Zoom controls */}
             <div className="flex items-center justify-center gap-4">
               <button
