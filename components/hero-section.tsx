@@ -38,7 +38,7 @@ export function HeroSection() {
   const mobile = typeof window !== "undefined" ? isMobile() : false
 
   return (
-    <section className="relative flex min-h-[80vh] md:min-h-screen items-center justify-center px-6 pt-16 md:pt-20 md:px-8">
+    <section className="relative flex min-h-[60vh] md:min-h-screen items-start md:items-center justify-center px-6 pt-20 md:pt-20 md:px-8">
       <motion.div
         initial={reducedMotion ? { opacity: 1, filter: "blur(0px)", scale: mobile ? 1 : 1.2 } : { opacity: 0, filter: "blur(20px)", scale: 0.95 }}
         animate={{ opacity: 1, filter: "blur(0px)", scale: mobile ? 1 : 1.2 }}
