@@ -1,5 +1,4 @@
 import { Header } from "@/components/header"
-import { HeroSection } from "@/components/hero-section"
 import { ArtworkSection } from "@/components/artwork-section"
 import { AboutSection } from "@/components/about-section"
 import { ExhibitionsSection } from "@/components/exhibitions-section"
@@ -85,9 +84,8 @@ export default function Home() {
         Skip to content
       </a>
       <Header />
-      <main id="main" className="min-h-screen bg-background">
+      <main id="main" className="min-h-screen bg-background pt-16 md:pt-20">
         <h1 className="sr-only">Tali Assa Art — Painter, Psychologist, Musician</h1>
-        <HeroSection />
         <ArtworkSection />
         <AboutSection />
         <ExhibitionsSection />
