@@ -1,13 +1,21 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getCategoryData } from '@/lib/utils/image-paths'
+import { getCategoryData, getImagePath } from '@/lib/utils/image-paths'
 import { CategoryPageContent } from './category-page-content'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>
+}
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://taliassa.art'
+
+const englishPart = (text: string | undefined): string | undefined => {
+  if (!text) return undefined
+  const parts = text.split(' | ').map((s) => s.trim())
+  return parts[1] || parts[0] || undefined
 }
 
 export async function generateMetadata(props: CategoryPageProps): Promise<Metadata> {
@@ -32,8 +40,47 @@ export default async function CategoryPage(props: CategoryPageProps) {
     notFound()
   }
 
+  const categoryUrl = `${siteUrl}/categories/${categoryData.slug}`
+  const imageArtworks = categoryData.artworks.filter((a) => !a.video)
+
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${categoryData.slug.charAt(0).toUpperCase() + categoryData.slug.slice(1)} — Tali Assa Art`,
+    url: categoryUrl,
+    inLanguage: ['en', 'he'],
+    isPartOf: { '@type': 'WebSite', name: 'Tali Assa Art', url: siteUrl },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: imageArtworks.length,
+      itemListElement: imageArtworks.map((artwork, index) => {
+        const name = englishPart(artwork.title) || 'Untitled'
+        const medium = englishPart(artwork.medium)
+        return {
+          '@type': 'ListItem',
+          position: index + 1,
+          url: `${categoryUrl}#${artwork.id}`,
+          item: {
+            '@type': 'VisualArtwork',
+            name,
+            url: `${categoryUrl}#${artwork.id}`,
+            image: getImagePath(categoryData.key, artwork.filename),
+            creator: { '@type': 'Person', name: 'Tali Assa', url: siteUrl },
+            ...(medium && { artMedium: medium, artworkSurface: medium }),
+            ...(artwork.year && { dateCreated: artwork.year }),
+            ...(artwork.size && { size: artwork.size }),
+          },
+        }
+      }),
+    },
+  }
+
   return (
     <main className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
       <Header />
       <Suspense fallback={<div className="min-h-screen bg-background" />}>
         <CategoryPageContent categoryData={categoryData} />
