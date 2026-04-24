@@ -25,7 +25,7 @@ const navigationButtonClassName =
   'hidden md:flex z-10 h-10 w-10 items-center justify-center rounded-full text-foreground/50 transition-all duration-300 hover:text-foreground hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
 
 const counterButtonClassName =
-  'flex h-12 w-12 md:h-10 md:w-10 items-center justify-center rounded-full border border-border/60 bg-foreground/[0.02] text-foreground/70 transition-colors hover:text-foreground hover:border-foreground/40 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
+  'flex h-12 w-12 md:h-10 md:w-10 items-center justify-center rounded-full border border-border bg-foreground/[0.04] text-foreground/80 transition-colors hover:text-foreground hover:border-foreground/40 hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
 
 export function LightboxModal({
   artworks,
@@ -41,6 +41,7 @@ export function LightboxModal({
   const [showKeyboardHint, setShowKeyboardHint] = useState(false)
   const { t, language } = useLanguage()
   const reducedMotion = useReducedMotion()
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null)
 
   // Reset states and lock body scroll when modal opens/closes
   useEffect(() => {
@@ -49,6 +50,9 @@ export function LightboxModal({
       setZoom(1)
       setSelectedDetailIndex(null)
       document.body.style.overflow = 'hidden'
+      // Move keyboard focus into the dialog so Tab starts inside it and
+      // Escape reliably targets this view.
+      requestAnimationFrame(() => closeButtonRef.current?.focus({ preventScroll: true }))
 
       // Show keyboard-shortcut hint on first-ever open; auto-dismiss after 3s.
       if (typeof window !== 'undefined' && !localStorage.getItem('lightbox-hint-seen')) {
@@ -178,9 +182,10 @@ export function LightboxModal({
               )}
             </div>
             <button
+              ref={closeButtonRef}
               onClick={onClose}
               className="absolute end-4 p-2 transition-opacity hover:opacity-60 cursor-pointer"
-              aria-label="Close lightbox"
+              aria-label={language === 'he' ? 'סגור' : 'Close lightbox'}
             >
               <X className="h-5 w-5" strokeWidth={1.5} />
             </button>
@@ -327,7 +332,7 @@ export function LightboxModal({
                           setZoom(1)
                         }}
                         className="relative h-20 w-20 overflow-hidden border-2 border-border transition-colors hover:border-foreground cursor-pointer"
-                        aria-label={`View detail ${idx + 1}`}
+                        aria-label={`View detail ${idx + 1} of ${currentArtwork.detailImages!.length}`}
                       >
                         <Image
                           src={getImagePath(categoryKey, detailPath)}
@@ -373,7 +378,7 @@ export function LightboxModal({
                 animate={{ opacity: 1, y: 0 }}
                 exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
                 transition={{ duration: reducedMotion ? 0.01 : 0.4, ease: 'easeOut' }}
-                className="pointer-events-none absolute bottom-28 left-1/2 -translate-x-1/2 rounded-full border border-border bg-background/90 px-4 py-2 font-sans text-[11px] uppercase tracking-widest text-muted-foreground backdrop-blur-sm"
+                className="pointer-events-none absolute bottom-28 left-1/2 -translate-x-1/2 rounded-full border border-border bg-background/90 px-4 py-2 font-sans text-xs uppercase tracking-widest text-foreground/70 backdrop-blur-sm"
                 aria-hidden="true"
               >
                 <span className="tabular-nums">← →</span>

@@ -183,6 +183,7 @@ export default function ExperiencePage() {
         animate={{ opacity: isLoading ? 0 : 1 }}
         transition={{ delay: isLoading ? 0 : 0.4, duration: 0.5 }}
         className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 z-10 pointer-events-none"
+        aria-hidden="true"
       >
         <p className="font-sans text-xs text-muted-foreground uppercase tracking-widest">
           Drag · Scroll · Click · WASD

@@ -34,8 +34,8 @@ const siteDescription =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Tali Assa Art — Painter, Psychologist, Musician",
-    template: "%s — Tali Assa Art",
+    default: "Tali Assa Art · Painter, Psychologist, Musician",
+    template: "%s · Tali Assa Art",
   },
   description: siteDescription,
   applicationName: "Tali Assa Art",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     alternateLocale: ["he_IL"],
     url: siteUrl,
-    title: "Tali Assa Art — Painter, Psychologist, Musician",
+    title: "Tali Assa Art · Painter, Psychologist, Musician",
     description: siteDescription,
     siteName: "Tali Assa Art",
     images: [
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
         url: "/female-artist-portrait-professional.jpg",
         width: 1200,
         height: 630,
-        alt: "Tali Assa — artist portrait",
+        alt: "Tali Assa · artist portrait",
       },
     ],
   },

@@ -6,6 +6,7 @@ import { ExhibitionsSection } from "@/components/exhibitions-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
 import { artworkCategories } from "@/lib/data/artwork-data"
+import { getLocalizedText } from "@/lib/utils"
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://taliassa.art"
 
@@ -25,16 +26,10 @@ const personSchema = {
   ],
 }
 
-const englishPart = (text: string | undefined): string | undefined => {
-  if (!text) return undefined
-  const parts = text.split(" | ").map((s) => s.trim())
-  return parts[1] || parts[0] || undefined
-}
-
 const galleryItems = artworkCategories.flatMap((category) =>
   category.artworks.slice(0, 4).map((artwork) => {
-    const name = englishPart(artwork.title) || "Untitled"
-    const medium = englishPart(artwork.medium)
+    const name = getLocalizedText(artwork.title, "en")
+    const medium = artwork.medium ? getLocalizedText(artwork.medium, "en") : undefined
     return {
       "@type": "VisualArtwork",
       name,

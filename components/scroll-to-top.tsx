@@ -41,7 +41,7 @@ export function ScrollToTop() {
           transition={{ duration: reducedMotion ? 0.01 : 0.3, ease: 'easeOut' }}
           whileHover={reducedMotion ? {} : { y: -2 }}
           whileTap={reducedMotion ? {} : { scale: 0.95 }}
-          className="fixed bottom-6 end-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/80 text-foreground/60 backdrop-blur-sm transition-colors hover:text-foreground cursor-pointer"
+          className="fixed bottom-6 end-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background/90 text-foreground/75 backdrop-blur-sm transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer"
           style={{ marginBottom: 'env(safe-area-inset-bottom)' }}
         >
           <ArrowUp className="h-5 w-5" strokeWidth={1.5} />

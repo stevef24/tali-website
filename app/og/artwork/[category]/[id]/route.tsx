@@ -1,13 +1,8 @@
 import { ImageResponse } from 'next/og'
 import { getCategoryData, getImagePath } from '@/lib/utils/image-paths'
+import { getLocalizedText } from '@/lib/utils'
 
 export const runtime = 'edge'
-
-const englishPart = (text: string | undefined): string | undefined => {
-  if (!text) return undefined
-  const parts = text.split(' | ').map((s) => s.trim())
-  return parts[1] || parts[0] || undefined
-}
 
 interface RouteContext {
   params: Promise<{ category: string; id: string }>
@@ -24,8 +19,8 @@ export async function GET(_req: Request, context: RouteContext) {
     return new Response('Not found', { status: 404 })
   }
 
-  const title = englishPart(artwork.title) || 'Untitled'
-  const medium = englishPart(artwork.medium)
+  const title = getLocalizedText(artwork.title, 'en')
+  const medium = artwork.medium ? getLocalizedText(artwork.medium, 'en') : undefined
   const meta = [artwork.year, medium, artwork.size].filter(Boolean).join(' · ')
   const imageUrl = getImagePath(categoryData.key, artwork.filename)
 

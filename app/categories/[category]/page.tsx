@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getCategoryData, getImagePath } from '@/lib/utils/image-paths'
+import { getLocalizedText } from '@/lib/utils'
 import { CategoryPageContent } from './category-page-content'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
@@ -12,12 +13,6 @@ interface CategoryPageProps {
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://taliassa.art'
 
-const englishPart = (text: string | undefined): string | undefined => {
-  if (!text) return undefined
-  const parts = text.split(' | ').map((s) => s.trim())
-  return parts[1] || parts[0] || undefined
-}
-
 export async function generateMetadata(props: CategoryPageProps): Promise<Metadata> {
   const params = await props.params
   const categoryData = getCategoryData(params.category)
@@ -27,18 +22,18 @@ export async function generateMetadata(props: CategoryPageProps): Promise<Metada
   }
 
   const slugTitle = params.category.charAt(0).toUpperCase() + params.category.slice(1)
-  const title = `${slugTitle} — Tali Assa Art`
+  const socialTitle = `${slugTitle} · Tali Assa Art`
   const description = `View ${categoryData.artworks.length} artworks in this collection`
   const ogUrl = `${siteUrl}/og/category/${categoryData.slug}`
 
   return {
-    title,
+    title: slugTitle, // rendered as "Spheres · Tali Assa Art" via layout template
     description,
     alternates: {
       canonical: `/categories/${categoryData.slug}`,
     },
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       url: `${siteUrl}/categories/${categoryData.slug}`,
       type: 'website',
@@ -47,7 +42,7 @@ export async function generateMetadata(props: CategoryPageProps): Promise<Metada
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: socialTitle,
       description,
       images: [ogUrl],
     },
@@ -68,7 +63,7 @@ export default async function CategoryPage(props: CategoryPageProps) {
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `${categoryData.slug.charAt(0).toUpperCase() + categoryData.slug.slice(1)} — Tali Assa Art`,
+    name: `${categoryData.slug.charAt(0).toUpperCase() + categoryData.slug.slice(1)} · Tali Assa Art`,
     url: categoryUrl,
     inLanguage: ['en', 'he'],
     isPartOf: { '@type': 'WebSite', name: 'Tali Assa Art', url: siteUrl },
@@ -76,8 +71,8 @@ export default async function CategoryPage(props: CategoryPageProps) {
       '@type': 'ItemList',
       numberOfItems: imageArtworks.length,
       itemListElement: imageArtworks.map((artwork, index) => {
-        const name = englishPart(artwork.title) || 'Untitled'
-        const medium = englishPart(artwork.medium)
+        const name = getLocalizedText(artwork.title, 'en')
+        const medium = artwork.medium ? getLocalizedText(artwork.medium, 'en') : undefined
         return {
           '@type': 'ListItem',
           position: index + 1,
