@@ -167,7 +167,7 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
                     {getLocalizedText(artwork.title, language)}
                   </p>
                   {(artwork.year || artwork.medium || artwork.size) && (
-                    <p className="font-sans text-xs text-muted-foreground">
+                    <p className="font-sans text-xs text-muted-foreground tabular-nums">
                       {[
                         artwork.year,
                         getLocalizedText(artwork.medium, language),

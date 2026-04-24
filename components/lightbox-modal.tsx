@@ -38,6 +38,7 @@ export function LightboxModal({
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [zoom, setZoom] = useState(1)
   const [selectedDetailIndex, setSelectedDetailIndex] = useState<number | null>(null)
+  const [showKeyboardHint, setShowKeyboardHint] = useState(false)
   const { t, language } = useLanguage()
   const reducedMotion = useReducedMotion()
 
@@ -48,6 +49,17 @@ export function LightboxModal({
       setZoom(1)
       setSelectedDetailIndex(null)
       document.body.style.overflow = 'hidden'
+
+      // Show keyboard-shortcut hint on first-ever open; auto-dismiss after 3s.
+      if (typeof window !== 'undefined' && !localStorage.getItem('lightbox-hint-seen')) {
+        setShowKeyboardHint(true)
+        localStorage.setItem('lightbox-hint-seen', '1')
+        const timer = setTimeout(() => setShowKeyboardHint(false), 3000)
+        return () => {
+          document.body.style.overflow = ''
+          clearTimeout(timer)
+        }
+      }
     } else {
       document.body.style.overflow = ''
     }
@@ -145,7 +157,7 @@ export function LightboxModal({
                     {getLocalizedText(currentArtwork.title, language)}
                   </span>
                   {(currentArtwork.year || currentArtwork.medium || currentArtwork.size) && (
-                    <span className="truncate font-sans text-sm text-muted-foreground md:text-base">
+                    <span className="truncate font-sans text-sm text-muted-foreground tabular-nums md:text-base">
                       {[
                         currentArtwork.year,
                         getLocalizedText(currentArtwork.medium, language),
@@ -319,6 +331,26 @@ export function LightboxModal({
               </div>
             )}
           </div>
+
+          {/* Keyboard-shortcut hint — shown once per visitor, 3-second auto-dismiss */}
+          <AnimatePresence>
+            {showKeyboardHint && (
+              <motion.div
+                initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
+                transition={{ duration: reducedMotion ? 0.01 : 0.4, ease: 'easeOut' }}
+                className="pointer-events-none absolute bottom-28 left-1/2 -translate-x-1/2 rounded-full border border-border bg-background/90 px-4 py-2 font-sans text-[11px] uppercase tracking-widest text-muted-foreground backdrop-blur-sm"
+                aria-hidden="true"
+              >
+                <span className="tabular-nums">← →</span>
+                <span className="mx-3 opacity-40">·</span>
+                <span>Esc</span>
+                <span className="mx-3 opacity-40">·</span>
+                <span className="tabular-nums">+/−</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>,
