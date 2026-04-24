@@ -246,7 +246,7 @@ main {
 /* View Transitions API animations */
 @supports (view-transition-name: auto) {
   ::view-transition-old(root) {
-    animation: fade-out 0.6s cubic-bezier(0.4, 0, 1, 1);
+    animation: fade-out 0.6s cubic-bezier(0.19, 1, 0.22, 1);
   }
 
   ::view-transition-new(root) {

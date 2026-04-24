@@ -3,7 +3,7 @@
 import type React from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { useLanguage } from "@/lib/i18n"
 import { artworkCategories } from "@/lib/data/artwork-data"
 import { getImagePath } from "@/lib/utils/image-paths"
@@ -27,20 +27,25 @@ function DesktopCategoryCard({
   index,
   onClick,
 }: DesktopCategoryCardProps) {
+  const reducedMotion = useReducedMotion()
   return (
     <motion.button
-      initial={{ opacity: 0 }}
+      initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      whileHover={{
-        scale: 1.05,
-        transition: { duration: 0.4, ease: EASE_LUXURY }
-      }}
+      whileHover={
+        reducedMotion
+          ? {}
+          : {
+              scale: 1.05,
+              transition: { duration: 0.4, ease: EASE_LUXURY },
+            }
+      }
       viewport={{ once: true, amount: 0.3 }}
-      transition={{
-        delay: index * 0.04,
-        duration: 0.6,
-        ease: EASE_LUXURY,
-      }}
+      transition={
+        reducedMotion
+          ? { duration: 0.01 }
+          : { delay: index * 0.04, duration: 0.6, ease: EASE_LUXURY }
+      }
       style={
         {
           viewTransitionName: `artwork-${categoryKey}`,
@@ -69,14 +74,15 @@ function DesktopCategoryCard({
 export function ArtworkSection() {
   const router = useRouter()
   const { t } = useLanguage()
+  const reducedMotion = useReducedMotion()
   return (
     <section id="work" className="px-6 py-6 md:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.h2
-          initial={{ opacity: 0 }}
+          initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.0, ease: EASE_LUXURY }}
+          transition={{ duration: reducedMotion ? 0.01 : 1.0, ease: EASE_LUXURY }}
           className="mb-4 md:mb-16 font-serif text-fluid-3xl tracking-tight"
         >
           {t.work.title}
@@ -104,15 +110,15 @@ export function ArtworkSection() {
             return (
               <motion.button
                 key={category.key}
-                initial={{ opacity: 0 }}
+                initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{
-                  delay: index * 0.04,
-                  duration: 0.6,
-                  ease: EASE_LUXURY,
-                }}
-                whileTap={{ scale: 0.97 }}
+                transition={
+                  reducedMotion
+                    ? { duration: 0.01 }
+                    : { delay: index * 0.04, duration: 0.6, ease: EASE_LUXURY }
+                }
+                whileTap={reducedMotion ? {} : { scale: 0.97 }}
                 onClick={() => router.push(`/categories/${category.slug}`)}
                 className="group relative overflow-hidden bg-muted cursor-pointer"
                 style={{

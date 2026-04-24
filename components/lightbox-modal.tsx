@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
-import { motion, AnimatePresence, type PanInfo } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion, type PanInfo } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from 'lucide-react'
 import { useLanguage } from '@/lib/i18n'
 import { getLocalizedText, formatSize } from '@/lib/utils'
@@ -37,6 +37,7 @@ export function LightboxModal({
   const [zoom, setZoom] = useState(1)
   const [selectedDetailIndex, setSelectedDetailIndex] = useState<number | null>(null)
   const { t, language } = useLanguage()
+  const reducedMotion = useReducedMotion()
 
   // Reset states and lock body scroll when modal opens/closes
   useEffect(() => {
@@ -115,9 +116,10 @@ export function LightboxModal({
     <AnimatePresence>
       {isOpen && currentArtwork && (
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          exit={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: reducedMotion ? 0.01 : 0.3 }}
           className="fixed inset-0 z-50 flex flex-col bg-background"
           role="dialog"
           aria-modal="true"
@@ -174,13 +176,13 @@ export function LightboxModal({
             {/* Image stage — swipeable on touch */}
             <motion.div
               key={`${currentIndex}-${selectedDetailIndex}`}
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={reducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3 }}
-              drag={!isShowingDetail && artworks.length > 1 && zoom === 1 ? 'x' : false}
+              exit={reducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+              transition={{ duration: reducedMotion ? 0.01 : 0.3 }}
+              drag={reducedMotion ? false : !isShowingDetail && artworks.length > 1 && zoom === 1 ? 'x' : false}
               dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.18}
+              dragElastic={reducedMotion ? 0 : 0.18}
               onDragEnd={handleDragEnd}
               className="relative flex-1 min-w-0 max-w-[75rem] overflow-hidden p-2 md:p-8 touch-pan-y"
             >
@@ -275,8 +277,8 @@ export function LightboxModal({
                 {currentArtwork.detailImages.map((detailPath, idx) => (
                   <motion.button
                     key={idx}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={reducedMotion ? {} : { scale: 1.05 }}
+                    whileTap={reducedMotion ? {} : { scale: 0.95 }}
                     onClick={() => {
                       setSelectedDetailIndex(idx)
                       setZoom(1)

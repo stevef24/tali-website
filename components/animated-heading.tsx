@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { EASE_LUXURY } from "@/lib/animations"
 
 interface AnimatedHeadingProps {
@@ -16,10 +16,11 @@ interface AnimatedHeadingProps {
 export function AnimatedHeading({
   text,
   className = "",
-  staggerDelay = 0.02,
+  staggerDelay = 0.05,
   viewport = { once: true },
 }: AnimatedHeadingProps) {
   const chars = text.split("")
+  const reducedMotion = useReducedMotion()
 
   return (
     <motion.h1
@@ -32,15 +33,15 @@ export function AnimatedHeading({
         <motion.span
           key={i}
           variants={{
-            hidden: { opacity: 0, filter: "blur(8px)" },
+            hidden: reducedMotion
+              ? { opacity: 1, filter: "blur(0px)" }
+              : { opacity: 0, filter: "blur(8px)" },
             visible: {
               opacity: 1,
               filter: "blur(0px)",
-              transition: {
-                delay: i * staggerDelay,
-                duration: 0.6,
-                ease: EASE_LUXURY,
-              },
+              transition: reducedMotion
+                ? { duration: 0.01 }
+                : { delay: i * staggerDelay, duration: 0.6, ease: EASE_LUXURY },
             },
           }}
           style={{ display: "inline-block" }}

@@ -15,6 +15,7 @@ export const DURATION = {
   slow: 1.0,
   blur: 1.0,
   heroBlur: 1.4,
+  button: 0.3,
 } as const
 
 // Stagger delays (in seconds)

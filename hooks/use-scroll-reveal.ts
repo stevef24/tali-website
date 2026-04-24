@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef } from 'react'
-import { useScroll, useTransform, MotionValue } from 'framer-motion'
+import { useScroll, useTransform, useReducedMotion, MotionValue } from 'framer-motion'
 
 interface ScrollRevealOptions {
   distance?: number
@@ -68,9 +68,12 @@ export function useParallax(
   distance: number = 100,
   speed: number = 0.5,
   direction: 'vertical' | 'horizontal' = 'vertical',
-  options: ParallaxOptions = {}
+  options: ParallaxOptions = {},
+  respectReducedMotion: boolean = true,
 ): ParallaxReturn {
   const { offset = ['start end', 'end start'] as const } = options
+  const reducedMotion = useReducedMotion()
+  const suppress = respectReducedMotion && reducedMotion
 
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
@@ -81,13 +84,13 @@ export function useParallax(
   const y = useTransform(
     scrollYProgress,
     [0, 1],
-    direction === 'vertical' ? [distance * speed, -distance * speed] : [0, 0]
+    suppress ? [0, 0] : direction === 'vertical' ? [distance * speed, -distance * speed] : [0, 0]
   )
 
   const x = useTransform(
     scrollYProgress,
     [0, 1],
-    direction === 'horizontal' ? [distance * speed, -distance * speed] : [0, 0]
+    suppress ? [0, 0] : direction === 'horizontal' ? [distance * speed, -distance * speed] : [0, 0]
   )
 
   return { ref, scrollYProgress, y, x }

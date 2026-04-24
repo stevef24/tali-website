@@ -1,20 +1,22 @@
 "use client"
 
 import { useRef } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion"
 
 export function BackgroundShapes() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const reducedMotion = useReducedMotion()
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   })
 
-  // Subtle parallax transformations for depth
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, 100])
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, 150])
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, 80])
-  const y4 = useTransform(scrollYProgress, [0, 1], [0, 120])
+  // Subtle parallax transformations for depth — collapsed to zero when the
+  // user prefers reduced motion so vertical scrolling stays still.
+  const y1 = useTransform(scrollYProgress, [0, 1], reducedMotion ? [0, 0] : [0, 100])
+  const y2 = useTransform(scrollYProgress, [0, 1], reducedMotion ? [0, 0] : [0, 150])
+  const y3 = useTransform(scrollYProgress, [0, 1], reducedMotion ? [0, 0] : [0, 80])
+  const y4 = useTransform(scrollYProgress, [0, 1], reducedMotion ? [0, 0] : [0, 120])
 
   return (
     <div ref={containerRef} className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">

@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { useLanguage } from "@/lib/i18n"
 import { EASE_LUXURY } from "@/lib/animations"
 import { getEncodedEmailDisplay } from "@/lib/email-obfuscator"
@@ -17,6 +17,7 @@ export function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
   const { t } = useLanguage()
+  const reducedMotion = useReducedMotion()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -90,20 +91,20 @@ export function ContactSection() {
     <section id="contact" className="px-6 py-6 md:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.h2
-          initial={{ opacity: 0, filter: "blur(20px)" }}
+          initial={reducedMotion ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(20px)" }}
           whileInView={{ opacity: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
-          transition={{ duration: 1.0, ease: EASE_LUXURY }}
+          transition={{ duration: reducedMotion ? 0.01 : 1.0, ease: EASE_LUXURY }}
           className="mb-4 md:mb-16 font-serif text-fluid-3xl tracking-tight"
         >
           {t.contact.title}
         </motion.h2>
         <div className="grid gap-16 md:grid-cols-2">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: EASE_LUXURY }}
+            transition={{ duration: reducedMotion ? 0.01 : 0.8, ease: EASE_LUXURY }}
           >
             <form onSubmit={handleSubmit} className="space-y-8">
               {formFields.map((field, index) => {
@@ -112,17 +113,17 @@ export function ContactSection() {
                 return (
                   <motion.div
                     key={field.name}
-                    initial={{ opacity: 0, filter: "blur(12px)" }}
+                    initial={reducedMotion ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(8px)" }}
                     whileInView={{ opacity: 1, filter: "blur(0px)" }}
                     viewport={{ once: true, amount: 0.3 }}
                     animate={{
-                      scale: focusedField === field.name ? 1.01 : 1,
+                      scale: reducedMotion ? 1 : focusedField === field.name ? 1.01 : 1,
                     }}
-                    transition={{
-                      delay: index * 0.08,
-                      duration: 0.6,
-                      ease: EASE_LUXURY,
-                    }}
+                    transition={
+                      reducedMotion
+                        ? { duration: 0.01 }
+                        : { delay: index * 0.08, duration: 0.6, ease: EASE_LUXURY }
+                    }
                     className="group"
                   >
                     <label htmlFor={fieldId} className="sr-only">
@@ -167,16 +168,27 @@ export function ContactSection() {
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  initial={{ opacity: 0, filter: "blur(8px)" }}
+                  initial={reducedMotion ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(8px)" }}
                   whileInView={{ opacity: 1, filter: "blur(0px)" }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.3, duration: 0.6, ease: EASE_LUXURY }}
-                  whileHover={isSubmitting ? {} : {
-                    scale: 1.05,
-                    borderColor: "var(--foreground)",
-                    boxShadow: "0 0 0 1px var(--foreground)",
-                  }}
-                  whileTap={isSubmitting ? {} : { scale: 0.98 }}
+                  animate={isSubmitting && !reducedMotion ? { opacity: [1, 0.6, 1] } : { opacity: 1 }}
+                  transition={
+                    isSubmitting && !reducedMotion
+                      ? { duration: 1.4, repeat: Infinity, ease: "easeInOut" }
+                      : reducedMotion
+                        ? { duration: 0.01 }
+                        : { delay: 0.3, duration: 0.6, ease: EASE_LUXURY }
+                  }
+                  whileHover={
+                    isSubmitting || reducedMotion
+                      ? {}
+                      : {
+                          scale: 1.05,
+                          borderColor: "var(--foreground)",
+                          boxShadow: "0 0 0 1px var(--foreground)",
+                        }
+                  }
+                  whileTap={isSubmitting || reducedMotion ? {} : { scale: 0.98 }}
                   data-magnetic
                   className="border border-foreground bg-transparent px-8 py-3 font-sans text-sm uppercase tracking-widest transition-all duration-300 hover:bg-foreground hover:text-background cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
@@ -207,10 +219,14 @@ export function ContactSection() {
             </form>
           </motion.div>
           <motion.div
-            initial={{ opacity: 0, filter: "blur(8px)" }}
+            initial={reducedMotion ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(8px)" }}
             whileInView={{ opacity: 1, filter: "blur(0px)" }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.8, ease: EASE_LUXURY }}
+            transition={
+              reducedMotion
+                ? { duration: 0.01 }
+                : { delay: 0.2, duration: 0.8, ease: EASE_LUXURY }
+            }
             className="flex flex-col justify-center"
           >
             <div className="space-y-6">

@@ -1,15 +1,17 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import { Menu, X, Sun, Moon, Globe } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
 import { useTheme } from "@/lib/theme"
+import { EASE_SMOOTH } from "@/lib/animations"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { language, setLanguage, t } = useLanguage()
   const { theme, toggleTheme } = useTheme()
+  const reducedMotion = useReducedMotion()
 
   // Prevent scroll when menu is open
   useEffect(() => {
@@ -53,9 +55,9 @@ export function Header() {
             <motion.button
               onClick={toggleTheme}
               data-magnetic
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              whileHover={reducedMotion ? {} : { y: -2 }}
+              whileTap={reducedMotion ? {} : { scale: 0.95 }}
+              transition={reducedMotion ? { duration: 0.01 } : { type: "spring", stiffness: 400, damping: 10 }}
               className="p-1.5 md:p-2 cursor-pointer"
               aria-label={theme === "light" ? t.theme.dark : t.theme.light}
             >
@@ -68,9 +70,9 @@ export function Header() {
             <motion.button
               onClick={toggleLanguage}
               data-magnetic
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              whileHover={reducedMotion ? {} : { y: -2 }}
+              whileTap={reducedMotion ? {} : { scale: 0.95 }}
+              transition={reducedMotion ? { duration: 0.01 } : { type: "spring", stiffness: 400, damping: 10 }}
               className="flex items-center gap-1 p-1.5 md:p-2 font-sans text-xs uppercase tracking-widest cursor-pointer"
               aria-label="Toggle language"
             >
@@ -80,14 +82,14 @@ export function Header() {
             <motion.button
               onClick={() => setIsOpen(true)}
               data-magnetic
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              whileTap={reducedMotion ? {} : { scale: 0.95 }}
+              transition={reducedMotion ? { duration: 0.01 } : { type: "spring", stiffness: 400, damping: 10 }}
               className="p-1.5 md:p-2 cursor-pointer"
               aria-label="Open menu"
             >
               <motion.div
                 animate={{ rotate: isOpen ? 45 : 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                transition={reducedMotion ? { duration: 0.01 } : { duration: 0.3, ease: "easeInOut" }}
               >
                 <Menu className="h-5 w-5 transition-opacity opacity-100 hover:opacity-60" strokeWidth={1.5} />
               </motion.div>
@@ -99,10 +101,10 @@ export function Header() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            exit={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: reducedMotion ? 0.01 : 0.3 }}
             className="fixed inset-0 z-50 bg-background"
           >
             <div className="mx-auto flex h-14 md:h-20 max-w-7xl items-center justify-between gap-2 px-6 lg:px-8">
@@ -120,22 +122,29 @@ export function Header() {
               {navItems.map((item, index) => (
                 <motion.div
                   key={item.label}
-                  initial={{ opacity: 0 }}
+                  initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: index * 0.12, duration: 0.5 }}
+                  transition={{
+                    delay: reducedMotion ? 0 : index * 0.12,
+                    duration: reducedMotion ? 0.01 : 0.5,
+                  }}
                   className={`overflow-hidden${item.desktopOnly ? " hidden md:block" : ""}`}
                 >
                   <motion.a
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    initial={{ y: 40, opacity: 0 }}
+                    initial={reducedMotion ? { y: 0, opacity: 1 } : { y: 40, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{
-                      delay: index * 0.12,
-                      duration: 0.6,
-                      ease: [0.34, 1.56, 0.64, 1],
-                    }}
-                    whileTap={{ scale: 0.96 }}
+                    transition={
+                      reducedMotion
+                        ? { duration: 0.01 }
+                        : {
+                            delay: index * 0.12,
+                            duration: 0.6,
+                            ease: EASE_SMOOTH,
+                          }
+                    }
+                    whileTap={reducedMotion ? {} : { scale: 0.96 }}
                     data-magnetic
                     className="font-sans text-3xl font-light tracking-wide md:text-4xl cursor-pointer relative inline-block after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
                   >

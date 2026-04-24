@@ -1,20 +1,21 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { useLanguage } from "@/lib/i18n"
 import { EASE_LUXURY } from "@/lib/animations"
 
 export function ExhibitionsSection() {
   const { t } = useLanguage()
+  const reducedMotion = useReducedMotion()
 
   return (
     <section id="exhibitions" className="bg-muted/30 px-6 py-6 md:py-24 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <motion.h2
-          initial={{ opacity: 0, filter: "blur(20px)" }}
+          initial={reducedMotion ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(20px)" }}
           whileInView={{ opacity: 1, filter: "blur(0px)" }}
           viewport={{ once: true }}
-          transition={{ duration: 1.0, ease: EASE_LUXURY }}
+          transition={{ duration: reducedMotion ? 0.01 : 1.0, ease: EASE_LUXURY }}
           className="mb-4 md:mb-16 font-serif text-fluid-3xl tracking-tight"
         >
           {t.exhibitions.title}
@@ -23,15 +24,15 @@ export function ExhibitionsSection() {
           {t.exhibitions.items.map((exhibition, index) => (
             <motion.div
               key={`${exhibition.year}-${exhibition.title}`}
-              initial={{ opacity: 0, filter: "blur(12px)" }}
+              initial={reducedMotion ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(8px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
               viewport={{ once: true, amount: 0.3 }}
-              transition={{
-                delay: index * 0.06,
-                duration: 0.7,
-                ease: EASE_LUXURY,
-              }}
-              whileHover={{ scale: 1.01 }}
+              transition={
+                reducedMotion
+                  ? { duration: 0.01 }
+                  : { delay: index * 0.06, duration: 0.7, ease: EASE_LUXURY }
+              }
+              whileHover={reducedMotion ? {} : { scale: 1.01 }}
               data-magnetic
               className="grid grid-cols-12 gap-4 border-t border-border py-6 first:border-t-0 transition-transform duration-300 cursor-pointer"
             >

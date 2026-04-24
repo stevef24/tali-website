@@ -1,32 +1,33 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n";
 import { EASE_LUXURY } from "@/lib/animations";
 import { getBlurDataUrl } from "@/lib/utils/image-paths";
 
 export function AboutSection() {
 	const { t } = useLanguage();
+	const reducedMotion = useReducedMotion();
 
 	return (
 		<section id="about" className="px-6 py-6 md:py-24 lg:px-8">
 			<div className="mx-auto max-w-7xl">
 				<motion.h2
-					initial={{ opacity: 0, filter: "blur(20px)" }}
+					initial={reducedMotion ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(20px)" }}
 					whileInView={{ opacity: 1, filter: "blur(0px)" }}
 					viewport={{ once: true }}
-					transition={{ duration: 1.0, ease: EASE_LUXURY }}
+					transition={{ duration: reducedMotion ? 0.01 : 1.0, ease: EASE_LUXURY }}
 					className="mb-4 md:mb-16 font-serif text-fluid-3xl tracking-tight"
 				>
 					{t.about.title}
 				</motion.h2>
 				<div className="grid gap-12 md:grid-cols-5 md:gap-16">
 					<motion.div
-						initial={{ opacity: 0, filter: "blur(30px)", scale: 0.92 }}
+						initial={reducedMotion ? { opacity: 1, filter: "blur(0px)", scale: 1 } : { opacity: 0, filter: "blur(12px)", scale: 0.92 }}
 						whileInView={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
 						viewport={{ once: true, amount: 0.3 }}
-						transition={{ duration: 1.2, ease: EASE_LUXURY }}
+						transition={{ duration: reducedMotion ? 0.01 : 1.2, ease: EASE_LUXURY }}
 						className="md:col-span-2 flex items-center"
 					>
 						<Image
@@ -45,14 +46,14 @@ export function AboutSection() {
 							{t.about.bio.map((paragraph, index) => (
 								<motion.p
 									key={index}
-									initial={{ opacity: 0, y: 20, filter: "blur(12px)" }}
+									initial={reducedMotion ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: 20, filter: "blur(8px)" }}
 									whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
 									viewport={{ once: true, amount: 0.3 }}
-									transition={{
-										delay: index * 0.12,
-										duration: 0.8,
-										ease: EASE_LUXURY,
-									}}
+									transition={
+										reducedMotion
+											? { duration: 0.01 }
+											: { delay: index * 0.12, duration: 0.8, ease: EASE_LUXURY }
+									}
 								>
 									{paragraph}
 								</motion.p>
