@@ -42,21 +42,21 @@ export function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-16 md:h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
+        <div className="mx-auto flex h-14 md:h-20 max-w-7xl items-center justify-between gap-2 px-6 lg:px-8">
           <a
             href="#"
-            className="font-serif text-2xl md:text-4xl tracking-tight cursor-pointer relative inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
+            className="font-serif text-xl md:text-4xl tracking-tight leading-none cursor-pointer relative inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
           >
             Tali Assa Art
           </a>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
             <motion.button
               onClick={toggleTheme}
               data-magnetic
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="p-2 cursor-pointer"
+              className="p-1.5 md:p-2 cursor-pointer"
               aria-label={theme === "light" ? t.theme.dark : t.theme.light}
             >
               {theme === "light" ? (
@@ -71,7 +71,7 @@ export function Header() {
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="flex items-center gap-1 p-2 font-sans text-xs uppercase tracking-widest cursor-pointer"
+              className="flex items-center gap-1 p-1.5 md:p-2 font-sans text-xs uppercase tracking-widest cursor-pointer"
               aria-label="Toggle language"
             >
               <Globe className="h-5 w-5 transition-opacity opacity-100 hover:opacity-60" strokeWidth={1.5} />
@@ -82,7 +82,7 @@ export function Header() {
               data-magnetic
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              className="p-2 cursor-pointer"
+              className="p-1.5 md:p-2 cursor-pointer"
               aria-label="Open menu"
             >
               <motion.div
@@ -105,12 +105,12 @@ export function Header() {
             transition={{ duration: 0.3 }}
             className="fixed inset-0 z-50 bg-background"
           >
-            <div className="mx-auto flex h-16 md:h-20 max-w-7xl items-center justify-between px-6 lg:px-8">
-              <span className="font-serif text-2xl md:text-4xl tracking-tight">Tali Assa Art</span>
+            <div className="mx-auto flex h-14 md:h-20 max-w-7xl items-center justify-between gap-2 px-6 lg:px-8">
+              <span className="font-serif text-xl md:text-4xl tracking-tight leading-none">Tali Assa Art</span>
               <button
                 onClick={() => setIsOpen(false)}
                 data-magnetic
-                className="p-2 transition-opacity hover:opacity-60 cursor-pointer"
+                className="p-1.5 md:p-2 transition-opacity hover:opacity-60 cursor-pointer"
                 aria-label="Close menu"
               >
                 <X className="h-5 w-5" strokeWidth={1.5} />
