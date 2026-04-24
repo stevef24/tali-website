@@ -68,22 +68,22 @@ export function LightboxModal({
     }
   }, [isOpen, initialIndex])
 
-  // Notify parent when the active artwork changes (for URL hash sync).
-  // The callback is stored in a ref so a new reference from the parent
-  // doesn't retrigger this effect — that caused an infinite render loop.
+  // Parent callback lives in a ref so a fresh inline arrow from the parent
+  // doesn't trigger re-subscription. We notify the parent directly from the
+  // navigation handlers below (instead of via a currentIndex-watching effect)
+  // to structurally prevent the render loop the latter created.
   const onIndexChangeRef = useRef(onIndexChange)
-  useEffect(() => {
-    onIndexChangeRef.current = onIndexChange
-  }, [onIndexChange])
-  useEffect(() => {
-    if (isOpen) onIndexChangeRef.current?.(currentIndex)
-  }, [currentIndex, isOpen])
+  onIndexChangeRef.current = onIndexChange
 
   const handleNext = useCallback(() => {
     if (selectedDetailIndex !== null) {
       setSelectedDetailIndex(null)
     } else {
-      setCurrentIndex(prev => (prev + 1) % artworks.length)
+      setCurrentIndex(prev => {
+        const next = (prev + 1) % artworks.length
+        onIndexChangeRef.current?.(next)
+        return next
+      })
       setZoom(1)
     }
   }, [artworks.length, selectedDetailIndex])
@@ -92,7 +92,11 @@ export function LightboxModal({
     if (selectedDetailIndex !== null) {
       setSelectedDetailIndex(null)
     } else {
-      setCurrentIndex(prev => (prev - 1 + artworks.length) % artworks.length)
+      setCurrentIndex(prev => {
+        const next = (prev - 1 + artworks.length) % artworks.length
+        onIndexChangeRef.current?.(next)
+        return next
+      })
       setZoom(1)
     }
   }, [artworks.length, selectedDetailIndex])
