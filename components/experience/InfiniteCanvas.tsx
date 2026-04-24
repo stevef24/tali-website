@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { useTheme } from 'next-themes'
+import { useTheme } from '@/lib/theme'
 import {
   CAMERA_FOV,
   CAMERA_NEAR,

@@ -68,37 +68,36 @@ export function LightboxModal({
     }
   }, [isOpen, initialIndex])
 
-  // Parent callback lives in a ref so a fresh inline arrow from the parent
-  // doesn't trigger re-subscription. We notify the parent directly from the
-  // navigation handlers below (instead of via a currentIndex-watching effect)
-  // to structurally prevent the render loop the latter created.
+  // Parent callback and currentIndex both live in refs so the navigation
+  // handlers below can stay memoized AND read fresh values without depending
+  // on them (which would cause the handlers to be recreated every step).
   const onIndexChangeRef = useRef(onIndexChange)
   onIndexChangeRef.current = onIndexChange
+  const currentIndexRef = useRef(currentIndex)
+  currentIndexRef.current = currentIndex
 
   const handleNext = useCallback(() => {
     if (selectedDetailIndex !== null) {
       setSelectedDetailIndex(null)
-    } else {
-      setCurrentIndex(prev => {
-        const next = (prev + 1) % artworks.length
-        onIndexChangeRef.current?.(next)
-        return next
-      })
-      setZoom(1)
+      return
     }
+    const next = (currentIndexRef.current + 1) % artworks.length
+    setCurrentIndex(next)
+    setZoom(1)
+    // Notify parent outside the setState updater so we don't trigger the
+    // "setState during render" warning.
+    onIndexChangeRef.current?.(next)
   }, [artworks.length, selectedDetailIndex])
 
   const handlePrevious = useCallback(() => {
     if (selectedDetailIndex !== null) {
       setSelectedDetailIndex(null)
-    } else {
-      setCurrentIndex(prev => {
-        const next = (prev - 1 + artworks.length) % artworks.length
-        onIndexChangeRef.current?.(next)
-        return next
-      })
-      setZoom(1)
+      return
     }
+    const next = (currentIndexRef.current - 1 + artworks.length) % artworks.length
+    setCurrentIndex(next)
+    setZoom(1)
+    onIndexChangeRef.current?.(next)
   }, [artworks.length, selectedDetailIndex])
 
   const handleDragEnd = useCallback(

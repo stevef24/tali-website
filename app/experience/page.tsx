@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LightboxModal } from '@/components/lightbox-modal'
+import { OnboardingOverlay } from '@/components/experience/OnboardingOverlay'
 import { getAllCanvasArtworks, type CanvasArtwork } from '@/lib/canvas/image-loader'
 import { useLanguage } from '@/lib/i18n'
 import type { Artwork } from '@/lib/types/artwork'
@@ -176,20 +177,23 @@ export default function ExperiencePage() {
         </h1>
       </motion.header>
 
-      {/* Instructions overlay */}
+      {/* Persistent gesture reminder — shown once loading completes, always visible */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.5 }}
+        animate={{ opacity: isLoading ? 0 : 1 }}
+        transition={{ delay: isLoading ? 0 : 0.4, duration: 0.5 }}
         className="absolute bottom-4 left-4 right-4 md:bottom-6 md:left-6 z-10 pointer-events-none"
       >
         <p className="font-sans text-xs text-muted-foreground uppercase tracking-widest">
-          Drag to explore • Click artwork to view • Scroll to zoom
+          Drag · Scroll · Click · WASD
         </p>
       </motion.div>
 
       {/* Canvas container */}
       <InfiniteCanvas onArtworkSelect={handleArtworkSelect} onProgress={handleProgress} />
+
+      {/* First-visit onboarding — only shows once per visitor */}
+      {!isLoading && <OnboardingOverlay />}
 
       {/* Lightbox modal */}
       {selectedArtwork && (
