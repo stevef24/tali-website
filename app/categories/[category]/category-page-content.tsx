@@ -32,7 +32,7 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
 
   return (
     <>
-      <div className="min-h-screen bg-background px-6 py-24 lg:px-8">
+      <div className="min-h-screen bg-background px-6 py-16 md:py-24 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Header with back button */}
           <motion.div

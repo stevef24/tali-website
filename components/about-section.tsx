@@ -11,7 +11,7 @@ export function AboutSection() {
 	const reducedMotion = useReducedMotion();
 
 	return (
-		<section id="about" className="px-6 py-6 md:py-24 lg:px-8">
+		<section id="about" className="px-6 py-16 md:py-24 lg:py-32 lg:px-8">
 			<div className="mx-auto max-w-7xl">
 				<motion.h2
 					initial={reducedMotion ? { opacity: 1, filter: "blur(0px)" } : { opacity: 0, filter: "blur(20px)" }}
