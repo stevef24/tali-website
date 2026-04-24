@@ -47,7 +47,7 @@ export function Header() {
         <div className="mx-auto flex h-14 md:h-20 max-w-7xl items-center justify-between gap-2 px-6 lg:px-8">
           <a
             href="#"
-            className="font-serif text-xl md:text-4xl tracking-tight leading-none cursor-pointer relative inline-block after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
+            className="font-serif text-xl md:text-4xl tracking-tight cursor-pointer inline-flex items-center self-stretch relative after:content-[''] after:absolute after:left-0 after:bottom-2 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-foreground after:transition-transform after:duration-300 hover:after:scale-x-100"
           >
             Tali Assa Art
           </a>

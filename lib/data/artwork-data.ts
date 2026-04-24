@@ -375,14 +375,14 @@ export const artworkCategories: CategoryData[] = [
 				filename: "",
 				title: "מצב אדום | Red State",
 				year: "2024",
-				video: { playbackId: "jurZoJiJ8DK4Epd64ghSUuSiatSnBG1lngLhpGVnmpU" },
+				video: { playbackId: "w01KPqMBoZXaXTq00pqrm5PNujURx1GQ006Aqm8tF0231j00" },
 			},
 			{
 				id: "video-gallery",
 				filename: "",
 				title: "גלריה | Gallery",
 				year: "2024",
-				video: { playbackId: "02JP6eYaXrCrrT00x9ump8r8fF1VTwc4S9fn83le7m5bk" },
+				video: { playbackId: "hlruxyybtfYBiY1IGjTLRlhvlYVjtT1GqdIA23EZRvs" },
 			},
 			{
 				id: "sphere-1",
