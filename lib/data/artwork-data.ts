@@ -380,7 +380,7 @@ export const artworkCategories: CategoryData[] = [
 			{
 				id: "video-gallery",
 				filename: "",
-				title: "גלריה | Gallery",
+				title: "סיור בתערוכה | A tour of the exhibition",
 				year: "2024",
 				video: { playbackId: "hlruxyybtfYBiY1IGjTLRlhvlYVjtT1GqdIA23EZRvs" },
 			},
