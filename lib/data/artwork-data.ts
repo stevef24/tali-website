@@ -371,6 +371,20 @@ export const artworkCategories: CategoryData[] = [
 			"detail 2/PHOTO-2025-tali 12-13-16-42-49 4-gigapixel-standard-scale-4_00x.jpg",
 		artworks: [
 			{
+				id: "video-red",
+				filename: "",
+				title: "מצב אדום | Red State",
+				year: "2024",
+				video: { playbackId: "jurZoJiJ8DK4Epd64ghSUuSiatSnBG1lngLhpGVnmpU" },
+			},
+			{
+				id: "video-gallery",
+				filename: "",
+				title: "גלריה | Gallery",
+				year: "2024",
+				video: { playbackId: "02JP6eYaXrCrrT00x9ump8r8fF1VTwc4S9fn83le7m5bk" },
+			},
+			{
 				id: "sphere-1",
 				filename:
 					"detail 1/PHOTO-2025-tail 12-13-16-42-49 2-gigapixel-standard-scale-4_00x.jpg",

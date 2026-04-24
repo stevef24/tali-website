@@ -15,6 +15,7 @@ export interface Artwork {
   medium?: string // optional metadata
   size?: string // optional metadata
   detailImages?: string[] // array of detail image paths (spheres only)
+  video?: { playbackId: string } // Mux playback ID — when present, tile renders MuxPlayer instead of Image
 }
 
 export interface CategoryData {

@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
+import MuxPlayer from '@mux/mux-player-react'
 import { useLanguage } from '@/lib/i18n'
 import { getLocalizedText, formatSize } from '@/lib/utils'
 import { getImagePath } from '@/lib/utils/image-paths'
@@ -18,6 +19,11 @@ interface CategoryPageContentProps {
 
 export function CategoryPageContent({ categoryData }: CategoryPageContentProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const reducedMotion = useReducedMotion()
+  const imageArtworks = useMemo(
+    () => categoryData.artworks.filter((a) => !a.video),
+    [categoryData.artworks],
+  )
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
   const { t, language } = useLanguage()
 
@@ -68,30 +74,50 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
                 transition={{ delay: index * 0.05 }}
                 className="flex flex-col"
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSelectedIndex(index)
-                    setIsLightboxOpen(true)
-                  }}
-                  aria-label={`${t.work.viewDetails}: ${getLocalizedText(artwork.title, language)}`}
-                  className="group relative aspect-square overflow-hidden bg-muted cursor-pointer"
-                >
-                  <Image
-                    src={getImagePath(categoryData.key, artwork.filename)}
-                    alt={getLocalizedText(artwork.title, language)}
-                    fill
-                    sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-                    placeholder="blur"
-                    blurDataURL={getBlurDataUrl()}
-                    className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-70"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <span className="bg-background/90 px-3 py-2 font-sans text-xs uppercase tracking-widest">
-                      {t.work.viewDetails}
-                    </span>
+                {artwork.video ? (
+                  <div className="group relative aspect-square overflow-hidden bg-muted">
+                    <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
+                      <MuxPlayer
+                        playbackId={artwork.video.playbackId}
+                        poster={`https://image.mux.com/${artwork.video.playbackId}/thumbnail.webp?time=0`}
+                        autoPlay={!reducedMotion}
+                        muted
+                        loop
+                        playsInline
+                        className="h-full w-full [--media-background-color:transparent] dark:[--media-background-color:black]"
+                        metadata={{
+                          videoTitle: getLocalizedText(artwork.title, language) || artwork.id,
+                          viewerUserId: 'portfolio-visitor',
+                        }}
+                      />
+                    </div>
                   </div>
-                </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedIndex(imageArtworks.indexOf(artwork))
+                      setIsLightboxOpen(true)
+                    }}
+                    aria-label={`${t.work.viewDetails}: ${getLocalizedText(artwork.title, language)}`}
+                    className="group relative aspect-square overflow-hidden bg-muted cursor-pointer"
+                  >
+                    <Image
+                      src={getImagePath(categoryData.key, artwork.filename)}
+                      alt={getLocalizedText(artwork.title, language)}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                      placeholder="blur"
+                      blurDataURL={getBlurDataUrl()}
+                      className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-70"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <span className="bg-background/90 px-3 py-2 font-sans text-xs uppercase tracking-widest">
+                        {t.work.viewDetails}
+                      </span>
+                    </div>
+                  </button>
+                )}
                 <div className="mt-3 space-y-0.5 text-center">
                   <p className="font-serif text-sm tracking-wide">
                     {getLocalizedText(artwork.title, language)}
@@ -112,9 +138,9 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
         </div>
       </div>
 
-      {/* Lightbox modal */}
+      {/* Lightbox modal — videos are filtered out so carousel only cycles images */}
       <LightboxModal
-        artworks={categoryData.artworks}
+        artworks={imageArtworks}
         initialIndex={selectedIndex ?? 0}
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}
