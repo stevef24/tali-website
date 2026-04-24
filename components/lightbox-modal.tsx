@@ -25,7 +25,7 @@ const navigationButtonClassName =
   'hidden md:flex z-10 h-10 w-10 items-center justify-center rounded-full text-foreground/50 transition-all duration-300 hover:text-foreground hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
 
 const counterButtonClassName =
-  'flex h-11 w-11 md:h-7 md:w-7 items-center justify-center rounded-full text-foreground/40 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
+  'flex h-12 w-12 md:h-10 md:w-10 items-center justify-center rounded-full border border-border/60 bg-foreground/[0.02] text-foreground/70 transition-colors hover:text-foreground hover:border-foreground/40 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
 
 export function LightboxModal({
   artworks,
@@ -246,16 +246,16 @@ export function LightboxModal({
           <div className="space-y-3 border-t border-border px-6 py-4">
             {/* Persistent navigation indicator — always visible, tappable */}
             {!isShowingDetail && artworks.length > 1 && (
-              <div className="flex items-center justify-center gap-3 md:gap-2">
+              <div className="flex items-center justify-center gap-4 md:gap-3">
                 <button
                   onClick={handlePrevious}
                   className={counterButtonClassName}
                   aria-label={language === 'he' ? 'יצירה קודמת' : 'Previous artwork'}
                 >
-                  <ChevronLeft className="h-6 w-6 md:h-4 md:w-4 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
+                  <ChevronLeft className="h-6 w-6 md:h-5 md:w-5 rtl:rotate-180" strokeWidth={1.5} aria-hidden="true" />
                 </button>
                 <span
-                  className="font-sans text-[11px] uppercase tracking-widest text-foreground/50 tabular-nums select-none"
+                  className="font-sans text-xs uppercase tracking-widest text-foreground/60 tabular-nums select-none"
                   aria-live="polite"
                   aria-atomic="true"
                 >
@@ -266,7 +266,7 @@ export function LightboxModal({
                   className={counterButtonClassName}
                   aria-label={language === 'he' ? 'יצירה הבאה' : 'Next artwork'}
                 >
-                  <ChevronRight className="h-6 w-6 md:h-4 md:w-4 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
+                  <ChevronRight className="h-6 w-6 md:h-5 md:w-5 rtl:rotate-180" strokeWidth={1.5} aria-hidden="true" />
                 </button>
               </div>
             )}
@@ -290,46 +290,68 @@ export function LightboxModal({
               </button>
             </div>
 
-            {/* Detail images thumbnails */}
-            {currentArtwork.detailImages && !isShowingDetail && (
-              <div className="flex flex-wrap gap-3 justify-center pt-4">
-                {currentArtwork.detailImages.map((detailPath, idx) => (
-                  <motion.button
-                    key={idx}
-                    whileHover={reducedMotion ? {} : { scale: 1.05 }}
-                    whileTap={reducedMotion ? {} : { scale: 0.95 }}
-                    onClick={() => {
-                      setSelectedDetailIndex(idx)
-                      setZoom(1)
-                    }}
-                    className="relative h-20 w-20 overflow-hidden border-2 border-border transition-colors hover:border-foreground cursor-pointer"
-                    aria-label={`View detail ${idx + 1}`}
-                  >
-                    <Image
-                      src={getImagePath(categoryKey, detailPath)}
-                      alt={`Detail ${idx + 1}`}
-                      fill
-                      sizes="80px"
-                      placeholder="blur"
-                      blurDataURL={getBlurDataUrl()}
-                      className="object-cover"
-                    />
-                  </motion.button>
-                ))}
-              </div>
-            )}
-
-            {/* Back button when viewing details */}
-            {isShowingDetail && (
-              <div className="flex justify-center pt-4">
-                <button
-                  onClick={() => setSelectedDetailIndex(null)}
-                  className="px-4 py-2 font-sans text-sm uppercase tracking-widest transition-opacity hover:opacity-60 cursor-pointer"
+            {/* Detail thumbnails / back button — animated so the layout slides
+                cleanly when artworks without details come into view. */}
+            <AnimatePresence initial={false}>
+              {currentArtwork.detailImages && !isShowingDetail && (
+                <motion.div
+                  key={`detail-thumbs-${currentIndex}`}
+                  layout
+                  initial={reducedMotion ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={reducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                  transition={{ duration: reducedMotion ? 0.01 : 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden"
                 >
-                  ← {t.work.mainImage}
-                </button>
-              </div>
-            )}
+                  <div className="flex flex-wrap gap-3 justify-center pt-4">
+                    {currentArtwork.detailImages.map((detailPath, idx) => (
+                      <motion.button
+                        key={idx}
+                        whileHover={reducedMotion ? {} : { scale: 1.05 }}
+                        whileTap={reducedMotion ? {} : { scale: 0.95 }}
+                        onClick={() => {
+                          setSelectedDetailIndex(idx)
+                          setZoom(1)
+                        }}
+                        className="relative h-20 w-20 overflow-hidden border-2 border-border transition-colors hover:border-foreground cursor-pointer"
+                        aria-label={`View detail ${idx + 1}`}
+                      >
+                        <Image
+                          src={getImagePath(categoryKey, detailPath)}
+                          alt={`Detail ${idx + 1}`}
+                          fill
+                          sizes="80px"
+                          placeholder="blur"
+                          blurDataURL={getBlurDataUrl()}
+                          className="object-cover"
+                        />
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {isShowingDetail && (
+                <motion.div
+                  key="back-button"
+                  layout
+                  initial={reducedMotion ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={reducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+                  transition={{ duration: reducedMotion ? 0.01 : 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden"
+                >
+                  <div className="flex justify-center pt-4">
+                    <button
+                      onClick={() => setSelectedDetailIndex(null)}
+                      className="px-4 py-2 font-sans text-sm uppercase tracking-widest transition-opacity hover:opacity-60 cursor-pointer"
+                    >
+                      ← {t.work.mainImage}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Keyboard-shortcut hint — shown once per visitor, 3-second auto-dismiss */}
