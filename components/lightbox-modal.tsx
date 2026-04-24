@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { motion, AnimatePresence, useReducedMotion, type PanInfo } from 'framer-motion'
@@ -68,10 +68,16 @@ export function LightboxModal({
     }
   }, [isOpen, initialIndex])
 
-  // Notify parent when the active artwork changes (for URL hash sync)
+  // Notify parent when the active artwork changes (for URL hash sync).
+  // The callback is stored in a ref so a new reference from the parent
+  // doesn't retrigger this effect — that caused an infinite render loop.
+  const onIndexChangeRef = useRef(onIndexChange)
   useEffect(() => {
-    if (isOpen) onIndexChange?.(currentIndex)
-  }, [currentIndex, isOpen, onIndexChange])
+    onIndexChangeRef.current = onIndexChange
+  }, [onIndexChange])
+  useEffect(() => {
+    if (isOpen) onIndexChangeRef.current?.(currentIndex)
+  }, [currentIndex, isOpen])
 
   const handleNext = useCallback(() => {
     if (selectedDetailIndex !== null) {
@@ -242,17 +248,23 @@ export function LightboxModal({
             )}
           </div>
 
-          {/* Zoom controls and detail images section */}
-          <div className="space-y-3 border-t border-border px-6 py-4">
+          {/* Zoom controls and detail images section — layout prop lets
+              Framer Motion animate size changes with FLIP transforms, which
+              is GPU-accelerated and avoids the jank of raw height anims. */}
+          <motion.div
+            layout
+            transition={{ layout: { duration: reducedMotion ? 0 : 0.22, ease: [0.19, 1, 0.22, 1] } }}
+            className="space-y-3 border-t border-border px-6 py-4"
+          >
             {/* Persistent navigation indicator — always visible, tappable */}
             {!isShowingDetail && artworks.length > 1 && (
-              <div className="flex items-center justify-center gap-4 md:gap-3">
+              <div className="flex items-center justify-center gap-4">
                 <button
                   onClick={handlePrevious}
-                  className={counterButtonClassName}
+                  className={`md:hidden ${counterButtonClassName}`}
                   aria-label={language === 'he' ? 'יצירה קודמת' : 'Previous artwork'}
                 >
-                  <ChevronLeft className="h-6 w-6 md:h-5 md:w-5 rtl:rotate-180" strokeWidth={1.5} aria-hidden="true" />
+                  <ChevronLeft className="h-6 w-6 rtl:rotate-180" strokeWidth={1.5} aria-hidden="true" />
                 </button>
                 <span
                   className="font-sans text-xs uppercase tracking-widest text-foreground/60 tabular-nums select-none"
@@ -263,10 +275,10 @@ export function LightboxModal({
                 </span>
                 <button
                   onClick={handleNext}
-                  className={counterButtonClassName}
+                  className={`md:hidden ${counterButtonClassName}`}
                   aria-label={language === 'he' ? 'יצירה הבאה' : 'Next artwork'}
                 >
-                  <ChevronRight className="h-6 w-6 md:h-5 md:w-5 rtl:rotate-180" strokeWidth={1.5} aria-hidden="true" />
+                  <ChevronRight className="h-6 w-6 rtl:rotate-180" strokeWidth={1.5} aria-hidden="true" />
                 </button>
               </div>
             )}
@@ -290,18 +302,16 @@ export function LightboxModal({
               </button>
             </div>
 
-            {/* Detail thumbnails / back button — animated so the layout slides
-                cleanly when artworks without details come into view. */}
-            <AnimatePresence initial={false}>
+            {/* Detail thumbnails / back button — opacity-only AnimatePresence;
+                the parent's `layout` prop handles the reflow with transforms. */}
+            <AnimatePresence mode="popLayout" initial={false}>
               {currentArtwork.detailImages && !isShowingDetail && (
                 <motion.div
                   key={`detail-thumbs-${currentIndex}`}
-                  layout
-                  initial={reducedMotion ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={reducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                  transition={{ duration: reducedMotion ? 0.01 : 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden"
+                  initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={reducedMotion ? { opacity: 0 } : { opacity: 0 }}
+                  transition={{ duration: reducedMotion ? 0.01 : 0.18, ease: [0.19, 1, 0.22, 1] }}
                 >
                   <div className="flex flex-wrap gap-3 justify-center pt-4">
                     {currentArtwork.detailImages.map((detailPath, idx) => (
@@ -334,12 +344,10 @@ export function LightboxModal({
               {isShowingDetail && (
                 <motion.div
                   key="back-button"
-                  layout
-                  initial={reducedMotion ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={reducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                  transition={{ duration: reducedMotion ? 0.01 : 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden"
+                  initial={reducedMotion ? { opacity: 1 } : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={reducedMotion ? { opacity: 0 } : { opacity: 0 }}
+                  transition={{ duration: reducedMotion ? 0.01 : 0.18, ease: [0.19, 1, 0.22, 1] }}
                 >
                   <div className="flex justify-center pt-4">
                     <button
@@ -352,7 +360,7 @@ export function LightboxModal({
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
 
           {/* Keyboard-shortcut hint — shown once per visitor, 3-second auto-dismiss */}
           <AnimatePresence>
