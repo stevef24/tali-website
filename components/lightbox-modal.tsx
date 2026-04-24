@@ -24,7 +24,7 @@ const navigationButtonClassName =
   'hidden md:flex z-10 h-10 w-10 items-center justify-center rounded-full text-foreground/50 transition-all duration-300 hover:text-foreground hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
 
 const counterButtonClassName =
-  'flex h-7 w-7 items-center justify-center rounded-full text-foreground/40 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
+  'flex h-11 w-11 md:h-7 md:w-7 items-center justify-center rounded-full text-foreground/40 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70 focus-visible:text-foreground cursor-pointer'
 
 export function LightboxModal({
   artworks,
@@ -225,13 +225,13 @@ export function LightboxModal({
           <div className="space-y-3 border-t border-border px-6 py-4">
             {/* Persistent navigation indicator — always visible, tappable */}
             {!isShowingDetail && artworks.length > 1 && (
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-3 md:gap-2">
                 <button
                   onClick={handlePrevious}
                   className={counterButtonClassName}
                   aria-label={language === 'he' ? 'יצירה קודמת' : 'Previous artwork'}
                 >
-                  <ChevronLeft className="h-4 w-4 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
+                  <ChevronLeft className="h-6 w-6 md:h-4 md:w-4 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
                 </button>
                 <span
                   className="font-sans text-[11px] uppercase tracking-widest text-foreground/50 tabular-nums select-none"
@@ -245,7 +245,7 @@ export function LightboxModal({
                   className={counterButtonClassName}
                   aria-label={language === 'he' ? 'יצירה הבאה' : 'Next artwork'}
                 >
-                  <ChevronRight className="h-4 w-4 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
+                  <ChevronRight className="h-6 w-6 md:h-4 md:w-4 rtl:rotate-180" strokeWidth={1.25} aria-hidden="true" />
                 </button>
               </div>
             )}
