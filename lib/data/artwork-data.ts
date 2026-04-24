@@ -340,7 +340,7 @@ export const artworkCategories: CategoryData[] = [
 			{
 				id: "human-25",
 				filename: "IMG_20171123_134654.jpg",
-				title: "ללא כותרת | Untitled (1)",
+				title: "ללא כותרת | Untitled",
 				year: "2015",
 				medium: "שמן על נייר | Oil on paper",
 				size: "15x15",
