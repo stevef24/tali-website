@@ -16,6 +16,7 @@ interface LightboxModalProps {
   isOpen: boolean
   onClose: () => void
   categoryKey: CategoryKey
+  onIndexChange?: (index: number) => void
 }
 
 // Arrows live in the dark gutter outside the image, not over it.
@@ -32,6 +33,7 @@ export function LightboxModal({
   isOpen,
   onClose,
   categoryKey,
+  onIndexChange,
 }: LightboxModalProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [zoom, setZoom] = useState(1)
@@ -53,6 +55,11 @@ export function LightboxModal({
       document.body.style.overflow = ''
     }
   }, [isOpen, initialIndex])
+
+  // Notify parent when the active artwork changes (for URL hash sync)
+  useEffect(() => {
+    if (isOpen) onIndexChange?.(currentIndex)
+  }, [currentIndex, isOpen, onIndexChange])
 
   const handleNext = useCallback(() => {
     if (selectedDetailIndex !== null) {

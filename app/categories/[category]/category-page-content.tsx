@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
@@ -26,6 +26,53 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
   )
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
   const { t, language } = useLanguage()
+
+  // Open the lightbox for an image artwork and push its id into the URL hash
+  // so the deep link is shareable and browser back closes the modal.
+  const openAtIndex = useCallback(
+    (index: number, mode: 'push' | 'replace' = 'push') => {
+      const artwork = imageArtworks[index]
+      if (!artwork) return
+      setSelectedIndex(index)
+      setIsLightboxOpen(true)
+      const hash = `#${artwork.id}`
+      if (typeof window !== 'undefined' && window.location.hash !== hash) {
+        if (mode === 'push') {
+          window.history.pushState({ artworkId: artwork.id }, '', hash)
+        } else {
+          window.history.replaceState({ artworkId: artwork.id }, '', hash)
+        }
+      }
+    },
+    [imageArtworks],
+  )
+
+  const closeLightbox = useCallback(() => {
+    setIsLightboxOpen(false)
+    if (typeof window !== 'undefined' && window.location.hash) {
+      // Drop the hash without leaving a dangling entry in history.
+      window.history.replaceState({}, '', window.location.pathname + window.location.search)
+    }
+  }, [])
+
+  // Open lightbox when URL hash matches an artwork (deep link or back/forward nav)
+  useEffect(() => {
+    const syncFromHash = () => {
+      const hash = window.location.hash.replace(/^#/, '')
+      if (!hash) {
+        setIsLightboxOpen(false)
+        return
+      }
+      const idx = imageArtworks.findIndex((a) => a.id === hash)
+      if (idx >= 0) {
+        setSelectedIndex(idx)
+        setIsLightboxOpen(true)
+      }
+    }
+    syncFromHash()
+    window.addEventListener('popstate', syncFromHash)
+    return () => window.removeEventListener('popstate', syncFromHash)
+  }, [imageArtworks])
 
   const categoryTitle = t.work.categories[categoryData.key]
   const categoryDescription = t.work.categoryDescriptions[categoryData.key]
@@ -95,10 +142,7 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
                 ) : (
                   <button
                     type="button"
-                    onClick={() => {
-                      setSelectedIndex(imageArtworks.indexOf(artwork))
-                      setIsLightboxOpen(true)
-                    }}
+                    onClick={() => openAtIndex(imageArtworks.indexOf(artwork))}
                     aria-label={`${t.work.viewDetails}: ${getLocalizedText(artwork.title, language)}`}
                     className="group relative aspect-square overflow-hidden bg-muted cursor-pointer"
                   >
@@ -143,7 +187,8 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
         artworks={imageArtworks}
         initialIndex={selectedIndex ?? 0}
         isOpen={isLightboxOpen}
-        onClose={() => setIsLightboxOpen(false)}
+        onClose={closeLightbox}
+        onIndexChange={(idx) => openAtIndex(idx, 'replace')}
         categoryKey={categoryData.key}
       />
     </>
