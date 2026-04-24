@@ -51,7 +51,7 @@ export function Header() {
           >
             Tali Assa Art
           </a>
-          <div className="flex items-center gap-1 md:gap-2">
+          <div className="flex items-center gap-0 md:gap-2">
             <motion.button
               onClick={toggleTheme}
               data-magnetic
