@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useThree } from '@react-three/fiber'
+import { Color } from 'three'
 import { useTheme } from '@/lib/theme'
 import {
   CAMERA_FOV,
@@ -38,7 +39,7 @@ export function InfiniteCanvas({ onArtworkSelect, onProgress }: InfiniteCanvasPr
   })
   const cameraPositionRef = useRef(cameraPosition)
   const [isReducedMotion, setIsReducedMotion] = useState(false)
-  const { resolvedTheme } = useTheme()
+  const { theme } = useTheme()
   const maxProgressRef = useRef(0)
 
   // Check for reduced motion preference
@@ -94,7 +95,7 @@ export function InfiniteCanvas({ onArtworkSelect, onProgress }: InfiniteCanvasPr
     onArtworkSelect(artwork, index)
   }, [onArtworkSelect])
 
-  const backgroundColor = resolvedTheme === 'dark'
+  const backgroundColor = theme === 'dark'
     ? BACKGROUND_COLOR_DARK
     : BACKGROUND_COLOR_LIGHT
 
@@ -122,6 +123,10 @@ export function InfiniteCanvas({ onArtworkSelect, onProgress }: InfiniteCanvasPr
           gl.setClearColor(backgroundColor)
         }}
       >
+        {/* Keep the renderer's clear color in sync when the site theme
+            toggles mid-session — onCreated only fires once. */}
+        <ClearColorSync color={backgroundColor} />
+
         {/* Fog for depth fading effect */}
         <fog attach="fog" args={[fogColor, FOG_NEAR, FOG_FAR]} />
 
@@ -139,4 +144,12 @@ export function InfiniteCanvas({ onArtworkSelect, onProgress }: InfiniteCanvasPr
       </Canvas>
     </div>
   )
+}
+
+function ClearColorSync({ color }: { color: string }) {
+  const { gl } = useThree()
+  useEffect(() => {
+    gl.setClearColor(new Color(color))
+  }, [gl, color])
+  return null
 }
