@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import MuxPlayer from '@mux/mux-player-react'
 import { useLanguage } from '@/lib/i18n'
 import { getLocalizedText, formatSize } from '@/lib/utils'
@@ -19,7 +19,6 @@ interface CategoryPageContentProps {
 
 export function CategoryPageContent({ categoryData }: CategoryPageContentProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-  const reducedMotion = useReducedMotion()
   const imageArtworks = useMemo(
     () => categoryData.artworks.filter((a) => !a.video),
     [categoryData.artworks],
@@ -123,21 +122,16 @@ export function CategoryPageContent({ categoryData }: CategoryPageContentProps) 
               >
                 {artwork.video ? (
                   <div className="group relative aspect-square overflow-hidden bg-muted">
-                    <div className="absolute inset-0 transition-transform duration-500 group-hover:scale-105">
-                      <MuxPlayer
-                        playbackId={artwork.video.playbackId}
-                        poster={`https://image.mux.com/${artwork.video.playbackId}/thumbnail.webp?time=0`}
-                        autoPlay={!reducedMotion}
-                        muted
-                        loop
-                        playsInline
-                        className="h-full w-full [--media-background-color:transparent] dark:[--media-background-color:black]"
-                        metadata={{
-                          videoTitle: getLocalizedText(artwork.title, language) || artwork.id,
-                          viewerUserId: 'portfolio-visitor',
-                        }}
-                      />
-                    </div>
+                    <MuxPlayer
+                      playbackId={artwork.video.playbackId}
+                      poster={`https://image.mux.com/${artwork.video.playbackId}/thumbnail.webp?time=0`}
+                      playsInline
+                      className="h-full w-full [--media-background-color:transparent] dark:[--media-background-color:black]"
+                      metadata={{
+                        videoTitle: getLocalizedText(artwork.title, language) || artwork.id,
+                        viewerUserId: 'portfolio-visitor',
+                      }}
+                    />
                   </div>
                 ) : (
                   <button
