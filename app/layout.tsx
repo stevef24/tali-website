@@ -6,6 +6,7 @@ import { Agentation } from "agentation"
 import { ThemeProvider } from "@/lib/theme"
 import { LanguageProvider } from "@/lib/i18n"
 import { CustomCursor } from "@/components/custom-cursor"
+import { ScrollToTop } from "@/components/scroll-to-top"
 import "./globals.css"
 
 const cormorant = Cormorant_Garamond({
@@ -115,7 +116,10 @@ export default function RootLayout({
       <body className={`${cormorant.variable} ${dmSans.variable} ${geistMono.variable} font-sans antialiased`}>
         <ThemeProvider>
           <CustomCursor />
-          <LanguageProvider>{children}</LanguageProvider>
+          <LanguageProvider>
+            {children}
+            <ScrollToTop />
+          </LanguageProvider>
         </ThemeProvider>
         <Analytics />
         {process.env.NODE_ENV === "development" && <Agentation />}
