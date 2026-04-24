@@ -26,9 +26,31 @@ export async function generateMetadata(props: CategoryPageProps): Promise<Metada
     return {}
   }
 
+  const slugTitle = params.category.charAt(0).toUpperCase() + params.category.slice(1)
+  const title = `${slugTitle} — Tali Assa Art`
+  const description = `View ${categoryData.artworks.length} artworks in this collection`
+  const ogUrl = `${siteUrl}/og/category/${categoryData.slug}`
+
   return {
-    title: `${params.category.charAt(0).toUpperCase() + params.category.slice(1)} — Tali Assa Art`,
-    description: `View ${categoryData.artworks.length} artworks in this collection`,
+    title,
+    description,
+    alternates: {
+      canonical: `/categories/${categoryData.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/categories/${categoryData.slug}`,
+      type: 'website',
+      siteName: 'Tali Assa Art',
+      images: [{ url: ogUrl, width: 1200, height: 630, alt: slugTitle }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogUrl],
+    },
   }
 }
 
